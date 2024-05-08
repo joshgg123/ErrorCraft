@@ -1,4 +1,5 @@
 import {Engine, Color, Scene} from 'excalibur';
+import {GameScene} from './GameScene';
 
 export const initializeGame = (canvasElement: HTMLCanvasElement) => {
     const game = new Engine({
@@ -12,3 +13,17 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
     });
 
     game.add("main", new GameScene());
+
+    game.goToScene("main");
+    return game;
+
+}
+
+
+export const startGame = (game: Engine) => {
+    game.start();
+  };
+
+  
+
+
