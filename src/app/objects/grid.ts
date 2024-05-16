@@ -4,9 +4,10 @@ import { Resources } from "../resource";
 import { Building } from "./building"; // Importa la clase Building
 
 export class Grid {
-  public backgroundMap!: TileMap;
+  public backgroundMap: TileMap;
   public mapchipSpriteSheet: SpriteSheet;
   public grasslandSprite: Sprite;
+  public carpaSprites: Sprite[];
 
   constructor(engine: Engine, numOfRow: number, numOfCol: number) {
     this.mapchipSpriteSheet = SpriteSheet.fromImageSource({
@@ -24,9 +25,23 @@ export class Grid {
         },
       },
     });
+
     this.grasslandSprite = this.mapchipSpriteSheet.getSprite(5, 0)!;
     this.grasslandSprite.width = config.TileWidth;
     this.grasslandSprite.height = config.TileWidth;
+
+    // Asegúrate de que tienes las cuatro partes del sprite 2x2
+    this.carpaSprites = [
+      this.mapchipSpriteSheet.getSprite(46, 10)!, // Parte superior izquierda
+      this.mapchipSpriteSheet.getSprite(47, 10)!, // Parte superior derecha
+      this.mapchipSpriteSheet.getSprite(46, 11)!, // Parte inferior izquierda
+      this.mapchipSpriteSheet.getSprite(47, 11)!, // Parte inferior derecha
+    ];
+
+    for (const sprite of this.carpaSprites) {
+      sprite.width = config.TileWidth;
+      sprite.height = config.TileWidth;
+    }
 
     const tileMapConfig = {
       pos: Vector.Zero,
@@ -36,9 +51,13 @@ export class Grid {
       tileHeight: config.TileWidth,
     };
     this.backgroundMap = new TileMap(tileMapConfig);
+
     engine.add(this.backgroundMap);
 
     this.initGrassland(numOfRow, numOfCol);
+
+    // Asegúrate de que el tilemap está inicializado antes de intentar añadir carpa
+    this.buildCarpa(5, 5);
   }
 
   initGrassland(numOfRow: number, numOfCol: number) {
@@ -51,7 +70,29 @@ export class Grid {
 
   buildGrassland = (row: number, col: number) => {
     const cell = this.backgroundMap.getTile(col, row);
-    cell.addGraphic(this.grasslandSprite);
+    if (cell) {
+      cell.addGraphic(this.grasslandSprite);
+    } else {
+      console.warn(`No se pudo obtener el tile en la posición (${col}, ${row})`);
+    }
+  };
+
+  buildCarpa = (row: number, col: number) => {
+    const positions = [
+      { row, col, sprite: this.carpaSprites[0] }, // Parte superior izquierda
+      { row, col: col + 1, sprite: this.carpaSprites[1] }, // Parte superior derecha
+      { row: row + 1, col, sprite: this.carpaSprites[2] }, // Parte inferior izquierda
+      { row: row + 1, col: col + 1, sprite: this.carpaSprites[3] } // Parte inferior derecha
+    ];
+
+    for (const pos of positions) {
+      const cell = this.backgroundMap.getTile(pos.col, pos.row);
+      if (cell) {
+        cell.addGraphic(pos.sprite);
+      } else {
+        console.warn(`No se pudo obtener el tile en la posición (${pos.col}, ${pos.row})`);
+      }
+    }
   };
 
   buildBuilding = (engine: Engine, row: number, col: number, playerMoney: number, buildingCost: number) => {
@@ -68,6 +109,11 @@ export class Grid {
 
   getTileCenter(x: number, y: number): Vector {
     const tile = this.backgroundMap.getTile(x, y);
-    return tile.center;
+    if (tile) {
+      return tile.center;
+    } else {
+      console.warn(`No se pudo obtener el centro del tile en la posición (${x}, ${y})`);
+      return Vector.Zero;
+    }
   }
 }

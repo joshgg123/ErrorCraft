@@ -9,4 +9,6 @@ export const config = {
   tapAreaX2: gameWidth * 0.75,
   tapAreaY1: gameHeight * 0.25,
   tapAreaY2: gameHeight * 0.75,
+  PlayerSpeed: 16*2, // pixels per second
+  PlayerFrameSpeed: 200, // ms
 };
