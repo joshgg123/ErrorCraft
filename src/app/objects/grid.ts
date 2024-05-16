@@ -6,10 +6,20 @@ import { Building } from "./building"; // Importa la clase Building
 export class Grid {
   public backgroundMap!: TileMap;
   public mapchipSpriteSheet: SpriteSheet;
-  public grasslandSprite: Sprite;
-
+  
+  public pastoSprite:Sprite;
+  
   constructor(engine: Engine, numOfRow: number, numOfCol: number) {
+    this.pastoSprite = new Sprite({
+      image: Resources.pasto,
+      destSize: {
+        width: 64,
+        height: 64,
+      },
+    });
+    
     this.mapchipSpriteSheet = SpriteSheet.fromImageSource({
+      
       image: Resources.mapchip,
       grid: {
         rows: 31,
@@ -24,9 +34,8 @@ export class Grid {
         },
       },
     });
-    this.grasslandSprite = this.mapchipSpriteSheet.getSprite(5, 0)!;
-    this.grasslandSprite.width = config.TileWidth;
-    this.grasslandSprite.height = config.TileWidth;
+    this.pastoSprite.width = config.TileWidth;
+    this.pastoSprite.height = config.TileWidth;
 
     const tileMapConfig = {
       pos: Vector.Zero,
@@ -51,8 +60,9 @@ export class Grid {
 
   buildGrassland = (row: number, col: number) => {
     const cell = this.backgroundMap.getTile(col, row);
-    cell.addGraphic(this.grasslandSprite);
+    cell.addGraphic(this.pastoSprite);
   };
+
 
   buildBuilding = (engine: Engine, row: number, col: number, playerMoney: number, buildingCost: number) => {
     if (playerMoney >= buildingCost) {
