@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 //import Layout from "../components/layout";
 import { Engine } from "excalibur";
 import { startGame } from "./main";
+import { Canvas } from "excalibur";
 
 export default function GamePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -13,7 +14,7 @@ export default function GamePage() {
 
     if (canvasRef.current && !gameInstance) {
       // Importa dinámicamente las funciones de inicialización y arranque del juego
-      import("./main").then(({ initializeGame, GameScene }) => {
+      import("./main").then(({ initializeGame, startGame }) => {
         if (isMounted) {
           // Solo procede si el componente sigue montado
           const engine = initializeGame(canvasRef.current!);
