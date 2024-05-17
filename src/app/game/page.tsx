@@ -1,9 +1,6 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
-//import Layout from "../components/layout";
-import { Engine } from "excalibur";
-import { startGame } from "./main";
-import { Canvas } from "excalibur";
+import { Engine } from "excalibur"
 
 export default function GamePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);

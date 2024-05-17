@@ -1,0 +1,19 @@
+#game-menu {
+    position: absolute;
+    top: 10px; /* Ajusta la posición según necesites */
+    left: 10px;
+    z-index: 1000; /* Asegúrate de que el menú esté por encima */
+}
+
+#menu-content {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+#menu-content img {
+    width: 50px; /* Ajusta el tamaño de las imágenes */
+    height: 50px;
+    margin: 5px;
+}
+

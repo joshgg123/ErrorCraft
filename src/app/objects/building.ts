@@ -4,17 +4,17 @@ import { Resources } from '../resource';
 export class Building extends Actor {
   public constructionSprite: Sprite;
   public completedSprite: Sprite;
-  public cost: number;
+  //public cost: number;
   private isCompleted: boolean;
 
-  constructor(pos: Vector, cost: number) {
+  constructor(pos: Vector, sprite: Sprite) {
     super({
       pos,
       width: 32,
       height: 32,
     });
-
-    this.cost = cost;
+    this.graphics.add(sprite);
+    //this.cost = cost;
     this.isCompleted = false;
 
     this.constructionSprite = new Sprite({
@@ -51,7 +51,7 @@ export class Building extends Actor {
     this.graphics.use(this.completedSprite);
   }
 
-  public getCost(): number {
-    return this.cost;
-  }
+  // public getCost(): number {
+  //   return this.cost;
+  // }
 }

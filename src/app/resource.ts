@@ -1,5 +1,4 @@
 import { ImageSource, ImageFiltering, Loadable, Loader, Resource, TileMap } from "excalibur";
-import {TiledResource} from "@excaliburjs/plugin-tiled";
 
 import mapchipPng from "../../public/assets/pasto.png";
 import process from "../../public/assets/constructionB.png";
