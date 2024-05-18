@@ -1,46 +1,102 @@
-import { Engine, Color, Loader } from 'excalibur';
+import { Engine, Actor, ScreenElement, Color, Vector } from 'excalibur';
 import * as ex from 'excalibur';
 import { Grid } from '../objects/grid';
-import { Resources } from '../resource';
-import { Coin } from '../componentes/coins';
-
+import { Player } from '../objects/player';
+import { loader,} from '../resource'; 
+import { config } from '../config';
 export const initializeGame = (canvasElement: HTMLCanvasElement) => {
   const game = new Engine({
     canvasElement: canvasElement,
-    width: 1200,
+    width: 1000,
     height: 600,
     backgroundColor: Color.fromHex('#35682d'),
     suppressPlayButton: true,
     suppressConsoleBootMessage: true,
     antialiasing: false,
   });
+  let buildingModeActive = false;
+    let selectedBuildingType: string | null = null;
+    let playerMoney = 2000;
+    let buildingCost = 500;
 
-  // Cargar todos los recursos
-  const loader = new Loader([
-    Resources.mapchip,
-    Resources.constructionImage,
-    Resources.completedImage,
-    Resources.pasto,
-    Resources.coin
-  ]);
+    game.start(loader).then(() => {
+        // Crear Grid y jugador
+        const grid = new Grid(game, 10, 16);
+        const player = new Player(Vector.Zero);
+        player.scale = Vector.One.scale(2);
+        game.add(player);
+        game.add(grid); // Asegúrate de agregar la grilla al juego
 
-  // Inicializar el juego después de cargar los recursos
-  loader.load().then(() => {
-    // Crear e inicializar la grilla de pasto
-    const grid = new Grid(game, 10, 19); // Puedes ajustar el tamaño de la grilla según tus necesidades
-    // Supongamos que el jugador comienza con 100 unidades de dinero
-    const coin = new Coin(game,{ numberOfCoins: 100, x: 50, y: 50 });
-    let playerMoney = 100;
-    // Construir un edificio en la grilla con un costo de 50 unidades
-    const buildingCost = 50;
-    playerMoney = grid.buildBuilding(game, 5, 5, playerMoney, buildingCost); // Puedes ajustar la posición del edificio según tus necesidades
+        // --- Creación del menú ---
+        const menuElement = document.createElement('div');
+        menuElement.id = 'game-menu';
+        menuElement.innerHTML = `
+            <button id="menu-button">Menú</button>
+            <div id="menu-content" style="display: none;">
+                <img src="../../../public/assets/building.png" alt="Imagen 1" data-building-type="Home">
+            </div>
+        `;
+        document.body.appendChild(menuElement);
 
-    console.log(`Player money after building: ${playerMoney}`);
+        const menuActor = new Actor({
+            x: 10,
+            y: 10,
+            width: menuElement.offsetWidth,
+            height: menuElement.offsetHeight
+        });
+
+        const menu = new ScreenElement({
+            anchor: menuActor.pos.clone(),
+            z: 1000
+        });
+        game.add(menu);
+        game.add(menuActor);
+
+        // --- Manejo del clic en el botón del menú ---
+        const menuButton = document.getElementById('menu-button') as HTMLButtonElement;
+        const menuContent = document.getElementById('menu-content') as HTMLDivElement;
+
+        menuButton.addEventListener('click', () => {
+            menuContent.style.display = menuContent.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // --- Manejo del clic en las imágenes del menú ---
+        const images = menuContent.querySelectorAll('img');
+        images.forEach(img => {
+            img.addEventListener('click', () => {
+                const buildingType = img.getAttribute('data-building-type');
+                startBuildingMode(buildingType ?? ''); // Usa ?? para evitar pasar null
+            });
+        });
+
+
+ function startBuildingMode(buildingType: string) {
+  buildingModeActive = true;
+  selectedBuildingType = buildingType;
+  menuContent.style.display = 'none'; // Cierra el menú
+
+  // Cambia el cursor del mouse (opcional)
+  canvasElement.style.cursor = 'crosshair';
+
+  game.input.pointers.primary.on('down', (event) => {
+   if (buildingModeActive) {
+    const tileX = Math.floor(event.worldPos.x / config.TileWidth);
+    const tileY = Math.floor(event.worldPos.y / config.TileWidth);
+
+    // Llama a la función buildBuilding de tu Grid
+    playerMoney = grid.buildBuilding(game, tileY, tileX, playerMoney, buildingCost, selectedBuildingType??''); 
+
+    // Desactiva el modo de construcción y restaura el cursor (opcional)
+    buildingModeActive = false;
+    canvasElement.style.cursor = 'default';
+
+    // Muestra el dinero restante del jugador (opcional)
+    console.log("Player money:", playerMoney);
+   }
   });
-
-  game.start(loader);
-
-  return game;
+ }
+    });
+    return game;
 }
 
 export const startGame = (game: Engine) => {
