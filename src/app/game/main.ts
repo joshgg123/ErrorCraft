@@ -2,7 +2,8 @@ import { Engine, Color, Loader } from 'excalibur';
 import * as ex from 'excalibur';
 import { Grid } from '../objects/grid';
 import { Resources } from '../resource';
-import {Coin} from '../componentes/coins';
+import { Coin } from '../componentes/coins';
+
 export const initializeGame = (canvasElement: HTMLCanvasElement) => {
   const game = new Engine({
     canvasElement: canvasElement,
@@ -20,7 +21,7 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
     Resources.constructionImage,
     Resources.completedImage,
     Resources.pasto,
-    Resources.coins
+    Resources.coin
   ]);
 
   // Inicializar el juego después de cargar los recursos
@@ -28,6 +29,7 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
     // Crear e inicializar la grilla de pasto
     const grid = new Grid(game, 10, 19); // Puedes ajustar el tamaño de la grilla según tus necesidades
     // Supongamos que el jugador comienza con 100 unidades de dinero
+    const coin = new Coin(game,{ numberOfCoins: 100, x: 50, y: 50 });
     let playerMoney = 100;
     // Construir un edificio en la grilla con un costo de 50 unidades
     const buildingCost = 50;

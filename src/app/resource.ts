@@ -10,5 +10,5 @@ export const Resources = {
     constructionImage: new ImageSource(process.src),
     completedImage: new ImageSource(completed.src),
     pasto: new ImageSource(pasto.src),
-    coins: new ImageSource(coins.src)
+    coin: new ImageSource(coins.src)
 };
