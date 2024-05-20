@@ -27,7 +27,8 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
         const player = new Player(Vector.Zero);
         player.scale = Vector.One.scale(2);
         game.add(player);
-        game.add(grid); // Asegúrate de agregar la grilla al juego
+        game.add(grid);
+         
 
         // --- Creación del menú ---
         const menuElement = document.createElement('div');
