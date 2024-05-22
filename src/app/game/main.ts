@@ -1,7 +1,4 @@
-import { Building } from './../objects/building';
-
 import { Engine, Actor, ScreenElement, Color, Vector } from 'excalibur';
-import * as ex from 'excalibur';
 import { Grid } from '../objects/grid';
 import { Player } from '../objects/player';
 import { loader,} from '../resource'; 
@@ -37,15 +34,18 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
         
         const player = new Player(Vector.Zero);
         player.scale = Vector.One.scale(3);
-        game.add(player);{}
+        game.add(player);
         
         // --- Creación del menú ---
         const menuElement = document.createElement('div');
         menuElement.id = 'game-menu';
+        menuElement.style.position = 'absolute';
+        menuElement.style.top = '166px';
+        menuElement.style.right = '439px';
         menuElement.innerHTML = `
-            <button id="menu-button">Menú</button>
+            <button id="menu-button" aria-label = "Open Menu" Style="padding:0"><img src="assets/menu2.png" alt="menu-icon"></button>
             <div id="menu-content" style="display: none;">
-                <img src="" alt="Imagen 1" data-building-type="Home">
+                <img src="assets/WaterBomb.png" alt="Imagen 1" data-building-type="Home">
             </div>
         `;
         document.body.appendChild(menuElement);
