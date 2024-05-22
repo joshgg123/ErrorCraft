@@ -3,7 +3,7 @@ import { Resources } from '../resource'; // Ajusta la ruta según sea necesario
 import { Engine, Vector, Animation, SpriteSheet, ImageSource } from "excalibur";
 
 interface CoinOptions {
-  numberOfCoins: number;
+  
   x: number;
   y: number;
 }
@@ -18,8 +18,8 @@ export class Coin extends ex.Actor {
       width: 128,
       height: 128
     });
-
-    this.numberOfCoins = options.numberOfCoins;
+    //inicializacion de
+    this.numberOfCoins = 2000;
 
     // Crear la spritesheet
     const coinSpriteSheet = ex.SpriteSheet.fromImageSource({
@@ -60,4 +60,5 @@ export class Coin extends ex.Actor {
     this.numberOfCoins = coins;
     this.label.text = `${coins}`;
   }
+ 
 }

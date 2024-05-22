@@ -22,6 +22,9 @@ export class Player extends ex.Actor {
                 columns: 8
             }
         });
+        //aumentar a 32 el tamaño de los sprites
+        //aumentar a 32 el tamaño de los sprites
+        
 
         const leftIdle = new ex.Animation({
             frames: [
@@ -31,6 +34,11 @@ export class Player extends ex.Actor {
                 {graphic: playerSpriteSheet.getSprite(3, 1) as ex.Sprite, duration: config.PlayerFrameSpeed},
             ]
         })
+        //aumentar el taaño de los sprites a 32
+
+
+
+        
         this.graphics.add('left-idle', leftIdle);
 
         const rightIdle = new ex.Animation({

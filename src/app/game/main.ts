@@ -1,9 +1,13 @@
+import { Building } from './../objects/building';
+
 import { Engine, Actor, ScreenElement, Color, Vector } from 'excalibur';
 import * as ex from 'excalibur';
 import { Grid } from '../objects/grid';
 import { Player } from '../objects/player';
 import { loader,} from '../resource'; 
 import { config } from '../config';
+import { Coin } from '../componentes/coins';
+
 export const initializeGame = (canvasElement: HTMLCanvasElement) => {
   const game = new Engine({
     canvasElement: canvasElement,
@@ -14,26 +18,34 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
     suppressConsoleBootMessage: true,
     antialiasing: false,
   });
+  const grid = new Grid(game, 10, 16);
+  //monedas
+  const coin = new Coin(game, {
+    x: 50, // Ajusta la posición X según sea necesario
+    y: 50  // Ajusta la posición Y según sea necesario
+  });
+  game.add(coin);
   let buildingModeActive = false;
     let selectedBuildingType: string | null = null;
     let playerMoney = 2000;
-    let buildingCost = 500;
+    let BuildingCost=1000;
+    
 
     game.start(loader).then(() => {
+             
         // Crear Grid y jugador
-        const grid = new Grid(game, 10, 16);
+        
         const player = new Player(Vector.Zero);
-        player.scale = Vector.One.scale(2);
-        game.add(player);
-        game.add(grid); // Asegúrate de agregar la grilla al juego
-
+        player.scale = Vector.One.scale(3);
+        game.add(player);{}
+        
         // --- Creación del menú ---
         const menuElement = document.createElement('div');
         menuElement.id = 'game-menu';
         menuElement.innerHTML = `
             <button id="menu-button">Menú</button>
             <div id="menu-content" style="display: none;">
-                <img src="../../../public/assets/building.png" alt="Imagen 1" data-building-type="Home">
+                <img src="" alt="Imagen 1" data-building-type="Home">
             </div>
         `;
         document.body.appendChild(menuElement);
@@ -84,20 +96,23 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
     const tileY = Math.floor(event.worldPos.y / config.TileWidth);
 
     // Llama a la función buildBuilding de tu Grid
-    playerMoney = grid.buildBuilding(game, tileY, tileX, playerMoney, buildingCost, selectedBuildingType??''); 
+    playerMoney = grid.buildBuilding(game, tileY, tileX, playerMoney, BuildingCost, selectedBuildingType??''); 
 
     // Desactiva el modo de construcción y restaura el cursor (opcional)
     buildingModeActive = false;
     canvasElement.style.cursor = 'default';
 
     // Muestra el dinero restante del jugador (opcional)
-    console.log("Player money:", playerMoney);
+    
+    coin.setNumberOfCoins(playerMoney);
    }
   });
+  
  }
     });
     return game;
 }
+
 
 export const startGame = (game: Engine) => {
   game.start();

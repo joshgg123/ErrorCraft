@@ -10,6 +10,7 @@ export class Grid {
   public carpaSprites: Sprite[];
   private buildings: Building[] = [];
 
+
   constructor(engine: Engine, numOfRow: number, numOfCol: number) {
     this.pastoSprite = new Sprite({
       image: Resources.pasto,
@@ -91,6 +92,8 @@ export class Grid {
             console.warn(`No se pudo obtener el tile en la posición (${pos.col}, ${pos.row})`);
         }
     }
+   this.buildings.push(new Building(this.getTileCenter(col, row), this.carpaSprites[0],));
+    
 }
 
 buildBuilding(engine: Engine, row: number, col: number, playerMoney: number, buildingCost: number, buildingType: string): number {
@@ -116,7 +119,7 @@ buildBuilding(engine: Engine, row: number, col: number, playerMoney: number, bui
     // Asegúrate de tener los sprites de los edificios cargados en Resources
     switch (buildingType) {
         case 'Home':
-            const completedImageSprite = Resources.completedImage.toSprite();
+            const completedImageSprite =  this.mapchipSpriteSheet.getSprite(54, 18)!;
             return completedImageSprite ? completedImageSprite.clone() : null;
         // Agrega más casos para otros tipos de edificios
         default:
