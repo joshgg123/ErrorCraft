@@ -36,7 +36,7 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
         menuElement.innerHTML = `
             <button id="menu-button">Menú</button>
             <div id="menu-content" style="display: none;">
-                <img src="../../../public/assets/building.png" alt="Imagen 1" data-building-type="Home">
+                <img src="assets/building.png" alt="Building 1" data-building-type="Home">
             </div>
         `;
         document.body.appendChild(menuElement);
