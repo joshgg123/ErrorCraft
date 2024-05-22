@@ -1,7 +1,7 @@
 import { Engine, Sprite, SpriteSheet, TileMap, Vector } from "excalibur";
 import { config } from "../config";
 import { Resources } from "../resource";
-import { Building } from "./building"; // Importa la clase Building
+import { Building } from "./building"; 
 
 export class Grid {
   public backgroundMap!: TileMap;
@@ -92,7 +92,7 @@ export class Grid {
             console.warn(`No se pudo obtener el tile en la posición (${pos.col}, ${pos.row})`);
         }
     }
-   this.buildings.push(new Building(this.getTileCenter(col, row), this.carpaSprites[0],));
+   this.buildings.push(new Building(this.getTileCenter(col, row), this.carpaSprites[0], "Carpa"));
     
 }
 
@@ -102,7 +102,7 @@ buildBuilding(engine: Engine, row: number, col: number, playerMoney: number, bui
 
       const buildingSprite = this.getBuildingSprite(buildingType);
       if (buildingSprite) {
-          const building = new Building(pos, buildingSprite);
+          const building = new Building(pos, buildingSprite, buildingType);
           this.buildings.push(building);
           engine.add(building);
           return playerMoney - buildingCost;
