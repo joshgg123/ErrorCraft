@@ -36,7 +36,6 @@ export default function GamePage() {
   }, [gameInstance]); // Dependencia: solo re-ejecuta este efecto si gameInstance cambia
 
   return (
-    <>
       <div className="fondo-about">
           <div className="flex justify-center items-center h-screen">
             <div className="border-8 border-stone-900">
@@ -44,6 +43,5 @@ export default function GamePage() {
             </div>
           </div>
       </div>
-    </>
   );
 }

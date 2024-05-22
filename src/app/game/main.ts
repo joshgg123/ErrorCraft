@@ -46,6 +46,7 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
             <button id="menu-button" aria-label = "Open Menu" Style="padding:0"><img src="assets/menu2.png" alt="menu-icon"></button>
             <div id="menu-content" style="display: none;">
                 <img src="assets/WaterBomb.png" alt="Imagen 1" data-building-type="Home">
+                <img src="assets/fabrica.png" alt="Imagen 2" data-building-type="Factory">
             </div>
         `;
         document.body.appendChild(menuElement);
