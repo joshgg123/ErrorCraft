@@ -18,26 +18,27 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
     suppressConsoleBootMessage: true,
     antialiasing: false,
   });
-  const grid = new Grid(game, 10, 16);
-  //monedas
-  const coin = new Coin(game, {
-    x: 50, // Ajusta la posición X según sea necesario
-    y: 50  // Ajusta la posición Y según sea necesario
-  });
-  game.add(coin);
   let buildingModeActive = false;
-    let selectedBuildingType: string | null = null;
-    let playerMoney = 2000;
-    let BuildingCost=1000;
-    
-
-    game.start(loader).then(() => {
-             
-        // Crear Grid y jugador
+        let selectedBuildingType: string | null = null;
+        let playerMoney = config.PlayerMoney;
+        let BuildingCost=1000;
         
-        const player = new Player(Vector.Zero);
-        player.scale = Vector.One.scale(3);
-        game.add(player);{}
+  
+  game.start(loader).then(() => {
+      
+      // Crear Grid y jugador
+      const grid = new Grid(game, 10, 16);
+      const player = new Player(Vector.Zero);
+      player.scale = Vector.One.scale(3);
+      game.add(player);{}
+      //monedas
+      const coin = new Coin(game, {
+        x: 50, // Ajusta la posición X según sea necesario
+        y: 50  // Ajusta la posición Y según sea necesario
+      });
+      game.add(coin);
+      
+      
         
         // --- Creación del menú ---
         const menuElement = document.createElement('div');

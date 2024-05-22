@@ -1,15 +1,16 @@
+
 import { Engine, Sprite, SpriteSheet, TileMap, Vector } from "excalibur";
 import { config } from "../config";
 import { Resources } from "../resource";
 import { Building } from "./building"; // Importa la clase Building
-
+import { Coin } from "../componentes/coins";
 export class Grid {
   public backgroundMap!: TileMap;
   public mapchipSpriteSheet: SpriteSheet;
   public pastoSprite:Sprite;
   public carpaSprites: Sprite[];
   private buildings: Building[] = [];
-
+  
 
   constructor(engine: Engine, numOfRow: number, numOfCol: number) {
     this.pastoSprite = new Sprite({
@@ -92,7 +93,7 @@ export class Grid {
             console.warn(`No se pudo obtener el tile en la posición (${pos.col}, ${pos.row})`);
         }
     }
-   this.buildings.push(new Building(this.getTileCenter(col, row), this.carpaSprites[0],));
+   this.buildings.push(new Building(this.getTileCenter(col, row), this.carpaSprites[0]));
     
 }
 

@@ -1,6 +1,7 @@
 import * as ex from 'excalibur';
 import { Resources } from '../resource'; // Ajusta la ruta según sea necesario
 import { Engine, Vector, Animation, SpriteSheet, ImageSource } from "excalibur";
+import { config } from '../config';
 
 interface CoinOptions {
   
@@ -19,7 +20,7 @@ export class Coin extends ex.Actor {
       height: 128
     });
     //inicializacion de
-    this.numberOfCoins = 2000;
+    this.numberOfCoins = config.PlayerMoney;
 
     // Crear la spritesheet
     const coinSpriteSheet = ex.SpriteSheet.fromImageSource({
@@ -60,5 +61,7 @@ export class Coin extends ex.Actor {
     this.numberOfCoins = coins;
     this.label.text = `${coins}`;
   }
+  //que se actualice y vuelva a tomar los valores de config para que se actualice 
+  
  
 }
