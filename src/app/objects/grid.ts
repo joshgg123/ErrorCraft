@@ -1,7 +1,8 @@
-import { Engine, Sprite, SpriteSheet, TileMap, Vector } from "excalibur";
+import { Engine, Sprite, SpriteSheet, TileMap, Vector, ImageSource } from 'excalibur'
 import { config } from "../config";
 import { Resources } from "../resource";
 import { Building } from "./building"; 
+
 
 export class Grid {
   public backgroundMap!: TileMap;
@@ -115,17 +116,40 @@ buildBuilding(engine: Engine, row: number, col: number, playerMoney: number, bui
       return playerMoney;
   }
 }
-  getBuildingSprite(buildingType: string): Sprite | null {
-    // Asegúrate de tener los sprites de los edificios cargados en Resources
-    switch (buildingType) {
-        case 'Home':
-            const completedImageSprite =  this.mapchipSpriteSheet.getSprite(54, 18)!;
-            return completedImageSprite ? completedImageSprite.clone() : null;
-        // Agrega más casos para otros tipos de edificios
-        default:
-            console.error(`Tipo de edificio desconocido: ${buildingType}`);
-            return null;
-    }
+getBuildingSprite(buildingType: string): Sprite | null {
+  switch (buildingType) {
+      case 'Home':
+          const spriteSheetSprite = this.mapchipSpriteSheet.getSprite(54, 18);
+          if (spriteSheetSprite) {
+              return spriteSheetSprite.clone();
+          }
+          break; 
+
+      // ... otros casos para sprites de SpriteSheet
+     
+      // Casos para imágenes simples: 
+      case 'Factory': 
+          const imageSource = Resources.factory; 
+          if (imageSource) {
+              return new Sprite({ 
+                  image: imageSource,
+              }); 
+          }
+          break;
+
+      default:
+          console.error(`Tipo de edificio desconocido: ${buildingType}`);
+          return null;
+  }
+
+  // Si llegamos aquí, significa que no se encontró el sprite en el SpriteSheet
+  // ni se encontró una imagen simple válida, entonces buscamos en Resources:
+  const imageFromResources = Resources[`${buildingType}Image`];
+  if (imageFromResources) {
+      return new Sprite({ image: imageFromResources });
+  }
+
+  return null; // Si no se encuentra nada, devolvemos null
 }
 
 isTileOccupied(col: number, row: number): boolean {
