@@ -1,5 +1,4 @@
-import { ImageSource } from "excalibur";
-import { Loader } from "excalibur";
+import { ImageSource, Loader } from "excalibur";
 import mapchipPng from "../../public/assets/pasto.png";
 
 import completed from "../../public/assets/Hero 01.png";
