@@ -5,7 +5,6 @@ import { getAuth, signInWithCustomToken } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { doc, getDoc } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
-import { get } from "http";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCPW3CKXJDc_5XadYW9zNsvQ2IiHDSY-zs",
@@ -57,3 +56,4 @@ export default function FirebaseUI() {
     </main>
   );
 }
+

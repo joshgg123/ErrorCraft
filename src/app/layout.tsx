@@ -1,4 +1,3 @@
-
 import {
   ClerkProvider,
   SignInButton,
@@ -28,3 +27,5 @@ export default function RootLayout({
     </ClerkProvider>
   )
 }
+
+
