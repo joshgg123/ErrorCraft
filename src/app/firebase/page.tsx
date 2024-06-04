@@ -2,8 +2,7 @@
 import { useAuth } from "@clerk/nextjs";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithCustomToken } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { doc, getDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, collection, addDoc, onSnapshot, query, orderBy } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
@@ -37,6 +36,49 @@ const getFirestoreData = async () => {
     console.log("No such document!");
   }
 };
+
+export interface ChatMessageData {
+  id: string;
+  message: string;
+  user: string; // Asegúrate de que 'user' esté presente
+  timestamp: Date;
+}
+
+export async function sendMessage(message: string, user: string) {
+  try{
+    await addDoc(collection(db, 'messages'), {
+      message,
+      user,
+      timestamp: new Date()
+    });
+  } catch (error) {
+    throw error;
+  }
+}
+  
+
+export function getMessages(callback: (messages: ChatMessageData[]) => void) {
+  const q = query(collection(db, 'messages'), orderBy('timestamp', 'asc'));
+
+  const unsubscribe = onSnapshot(q, (querySnapshot) => { // Asignar el resultado de onSnapshot a una variable
+    const messages: ChatMessageData[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      if (typeof data.message === 'string' && typeof data.user === 'string' && data.timestamp instanceof Date) {
+        messages.push({ id: doc.id, ...data } as ChatMessageData);
+      } else {
+        console.error('Mensaje con formato incorrecto:', doc.data());
+      }
+    });
+    callback(messages);
+  });
+
+  return unsubscribe; // Devolver la función para cancelar la suscripción
+}
+
+
+
+
 
 export default function FirebaseUI() {
   const { getToken } = useAuth();
