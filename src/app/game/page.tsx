@@ -1,47 +1,70 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
-//import Layout from "../components/layout";
 import { Engine } from "excalibur";
-import { startGame } from "./main";
-import { Canvas } from "excalibur";
+import { useUser } from "@clerk/nextjs";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase/page";
 
-export default function GamePage() {
+const GamePage: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameInstance, setGameInstance] = useState<Engine | null>(null);
+  const { user } = useUser();
 
   useEffect(() => {
-    let isMounted = true; 
+    let isMounted = true;
 
     if (canvasRef.current && !gameInstance) {
-      // Importa dinámicamente las funciones de inicialización y arranque del juego
       import("./main").then(({ initializeGame, startGame }) => {
         if (isMounted) {
-          // Solo procede si el componente sigue montado
           const engine = initializeGame(canvasRef.current!);
-          setGameInstance(engine); // Guarda la instancia del juego en el estado
+          setGameInstance(engine);
           startGame(engine);
         }
       });
     }
 
-    // Función de limpieza para cuando el componente se desmonte
+    // Guardar información del usuario en Firebase
+    if (user) {
+      console.log("User detected:", user); // Log para verificar que `user` está disponible
+
+      const userId = user.id;
+      const userName = user.fullName || user.emailAddresses[0].emailAddress;
+
+      const saveUserToFirebase = async () => {
+        
+          console.log("Saving user to Firebase:", { userId, userName }); // Log antes de guardar
+
+          await setDoc(doc(db, "users", userId), {
+            name: userName,
+            id: userId
+          });
+          console.log("User saved to Firebase:", { userId, userName }); // Log después de guardar
+        
+      };
+
+      saveUserToFirebase();
+    } else {
+      console.log("No user detected."); // Log cuando `user` es null o undefined
+    }
+
     return () => {
-      isMounted = false; // Indica que el componente se ha desmontado
+      isMounted = false;
       if (gameInstance) {
-        // Detén el juego y realiza cualquier limpieza necesaria
         gameInstance.stop();
-        setGameInstance(null); // Limpia la instancia del juego
+        setGameInstance(null);
       }
     };
-  }, [gameInstance]); // Dependencia: solo re-ejecuta este efecto si gameInstance cambia
+  }, [gameInstance, user]);
 
   return (
-      <div className="fondo-about">
-          <div className="flex justify-center items-center h-screen">
-            <div className="border-8 border-stone-900">
-              <canvas ref={canvasRef} className="m-auto" />
-            </div>
-          </div>
+    <div className="fondo-about">
+      <div className="flex justify-center items-center h-screen">
+        <div className="border-8 border-stone-900">
+          <canvas ref={canvasRef} className="m-auto" />
+        </div>
       </div>
+    </div>
   );
-}
+};
+
+export default GamePage;

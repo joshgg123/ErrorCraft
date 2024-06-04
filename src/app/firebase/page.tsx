@@ -7,14 +7,14 @@ import { doc, getDoc } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCPW3CKXJDc_5XadYW9zNsvQ2IiHDSY-zs",
-    authDomain: "errorcraft-f0d72.firebaseapp.com",
-    projectId: "errorcraft-f0d72",
-    storageBucket: "errorcraft-f0d72.appspot.com",
-    messagingSenderId: "307701554089",
-    appId: "1:307701554089:web:3d6fdf3210dd6b545882b8",
-    measurementId: "G-MPZP7KH95J"
-  };
+  apiKey: "AIzaSyDjPoIyEJ0xjH98l7c6WP2xxPFD9lsGjLM",
+  authDomain: "errorcraft-1296d.firebaseapp.com",
+  projectId: "errorcraft-1296d",
+  storageBucket: "errorcraft-1296d.appspot.com",
+  messagingSenderId: "815598507118",
+  appId: "1:815598507118:web:1a803df62c94c26665c27f",
+  measurementId: "G-J9B0FJKBB9"
+};
 
 // Connect to your Firebase app
 const app = initializeApp(firebaseConfig);
@@ -23,6 +23,7 @@ const db = getFirestore(app);
 // Connect to Firebase auth
 const auth = getAuth(app);
 
+export {db};
 const analytics = getAnalytics(app);
 
 // Remove this if you do not have Firestore set up
@@ -48,6 +49,7 @@ export default function FirebaseUI() {
      // the Firebase platform as an authenticated user.
     console.log("User:", userCredentials.user);
   };
+  
 
   return (
     <main style={{ display: "flex", flexDirection: "column", rowGap: "1rem" }}>
