@@ -141,15 +141,7 @@ getBuildingSprite(buildingType: string): Sprite | null {
           console.error(`Tipo de edificio desconocido: ${buildingType}`);
           return null;
   }
-
-  // Si llegamos aquí, significa que no se encontró el sprite en el SpriteSheet
-  // ni se encontró una imagen simple válida, entonces buscamos en Resources:
-  const imageFromResources = Resources[`${buildingType}Image`];
-  if (imageFromResources) {
-      return new Sprite({ image: imageFromResources });
-  }
-
-  return null; // Si no se encuentra nada, devolvemos null
+  return null;
 }
 
 isTileOccupied(col: number, row: number): boolean {
