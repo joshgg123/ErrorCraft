@@ -1,7 +1,5 @@
 import { ImageSource, Loader } from "excalibur";
 import mapchipPng from "../../public/assets/pasto.png";
-
-import completed from "../../public/assets/Hero 01.png";
 import pasto from "../../public/assets/pastoSprite.png"
 import coins from "../../public/assets/coin_Sheet32x32.png"
 import heroPath from "../../public/assets/Hero 01.png"
