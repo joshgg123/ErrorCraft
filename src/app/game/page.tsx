@@ -2,9 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import ChatInput from "../componentes/ChatInput";
-import ChatMessage from "../componentes/ChatMessage";
 import { getMessages } from "../firebase/page";
-import toast from "react-hot-toast";
 import { Engine, Actor, Label, vec, Font } from "excalibur";
 
 interface ChatMessageData {
@@ -22,7 +20,6 @@ export default function GamePage() {
 
   useEffect(() => {
     let isMounted = true;
-
     if (canvasRef.current && !gameInstance) {
       import("./main").then(({ initializeGame, startGame }) => {
         if (isMounted) {
@@ -30,15 +27,15 @@ export default function GamePage() {
           setGameInstance(engine);
           startGame(engine);
 
-          // Crear actor para el chat (usando vec para la posición)
+          // Crear un actor para el chat y agregarlo a la escena
           const chatActor = new Actor({
-            pos: vec(200, 100),
-            width: 400,
-            height: 300,
+            pos: vec(200, 100), // Posición inicial del chat
+            width: 400, // Ancho del chat
+            height: 300, // Alto del chat
           });
 
-          // Crear label para mostrar mensajes (usando Font)
-          const chatFont = new Font({
+           // Crear label para mostrar mensajes (usando Font)
+           const chatFont = new Font({
             size: 16,
             family: "sans-serif",
           });
@@ -58,18 +55,19 @@ export default function GamePage() {
           };
           updateChatLabel();
 
-          // Suscribirse a nuevos mensajes
+          // Suscribirse a nuevos mensajes y actualizar el label
           const unsubscribe = getMessages((newMessages) => {
             setMessages(newMessages);
             updateChatLabel();
           });
 
           // Limpieza al desmontar
-          return () => unsubscribe(); 
+          return () => {
+            unsubscribe();
+          };
         }
       });
     }
-
     return () => {
       isMounted = false;
       if (gameInstance) {
@@ -94,3 +92,5 @@ export default function GamePage() {
     </div>
   );
 }
+
+

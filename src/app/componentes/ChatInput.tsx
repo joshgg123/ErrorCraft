@@ -1,5 +1,4 @@
-// components/ChatInput.tsx
-"use client"; // Indica que este componente se ejecutará en el cliente
+"use client";
 import { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import toast from 'react-hot-toast';
@@ -7,13 +6,13 @@ import { sendMessage } from '../firebase/page';
 
 const ChatInput = () => {
   const { isLoaded, isSignedIn, user } = useUser();
-  const [message, setMessage] = useState(''); // Estado local para el mensaje
+  const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim() || !isSignedIn) return;
     try {
-      await sendMessage(message, user!.firstName || 'Anonymous');
+      await sendMessage(message, user?.firstName ?? 'Anonymous');
       setMessage('');
     } catch (error) {
       toast.error('Error al enviar el mensaje');
