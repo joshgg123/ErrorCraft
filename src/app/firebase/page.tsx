@@ -22,38 +22,37 @@ const analytics = getAnalytics(app);
 
 
 export async function sendMessage(message: string, user: string) {
-  console.log("Enviando mensaje:", message, user);
   try {
-    await addDoc(collection(db, 'messages'), {
-
+    const newMessageRef = await addDoc(collection(db, "messages"), {
       message,
       user,
       timestamp: new Date(),
     });
-    console.log("Mensaje enviado");
+    console.log("Mensaje guardado con ID:", newMessageRef.id); // Mensaje de confirmación
   } catch (error) {
-    console.error("Error al enviar el mensaje:", error);
+    console.error("Error al guardar mensaje:", error); // Manejo de errores
     throw error;
   }
 }
 
+
 export function getMessages(callback: (messages: ChatMessageData[]) => void) {
-  const q = query(collection(db, 'messages'), orderBy('timestamp', 'asc'));
+  const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
 
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     const messages: ChatMessageData[] = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data();
       if (
-        typeof data.message === 'string' &&
-        typeof data.user === 'string' &&
-        data.timestamp instanceof Timestamp  // Comprobar si es Timestamp de Firestore
+        typeof data.message === "string" &&
+        typeof data.user === "string" &&
+        data.timestamp instanceof Timestamp // Comprobar si es Timestamp de Firestore
       ) {
         // Convertir Timestamp a Date
         const timestamp = data.timestamp.toDate();
         messages.push({ id: doc.id, message: data.message, user: data.user, timestamp });
       } else {
-        console.error('Mensaje con formato incorrecto:', doc.data());
+        console.error("Mensaje con formato incorrecto:", doc.data());
       }
     });
     callback(messages);

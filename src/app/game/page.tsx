@@ -2,7 +2,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import ChatInput from "../componentes/ChatInput";
-import { getMessages } from "../firebase/page";
+import { getMessages, db } from "../firebase/page";
+import {doc, setDoc} from "firebase/firestore";
 import { Engine, Actor, Label, vec, Font } from "excalibur";
 
 interface ChatMessageData {
@@ -15,7 +16,7 @@ interface ChatMessageData {
 export default function GamePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameInstance, setGameInstance] = useState<Engine | null>(null);
-  const { isLoaded, isSignedIn } = useUser();
+  const { isLoaded, isSignedIn, user } = useUser();
   const [messages, setMessages] = useState<ChatMessageData[]>([]);
 
   useEffect(() => {
@@ -68,6 +69,22 @@ export default function GamePage() {
         }
       });
     }
+
+    if(user) {
+      console.log("Usuario Detectado:", user);
+      const userId = user.id;
+      const userName = user.fullName ?? user.emailAddresses[0].emailAddress;
+      const saveUserToFirebase = async () => {
+        console.log("Guardando usuario en Firebase...", { userId, userName });
+        await setDoc(doc(db, "users", userId), { name: userName, id: userId });
+        console.log("Usuario guardado", { userId, userName });
+      }
+
+      saveUserToFirebase();
+    } else {
+      console.log("Usuario no detectado");
+    }
+
     return () => {
       isMounted = false;
       if (gameInstance) {
