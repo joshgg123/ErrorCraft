@@ -6,6 +6,10 @@ import {
   UserButton
 } from '@clerk/nextjs'
 import './globals.css'
+import type { AppProps } from 'next/app';
+
+const clerkFrontendApi = process.env.NEXT_PUBLIC_CLERK_FRONTEND_API;
+
 export default function RootLayout({
   children,
 }: {
@@ -16,7 +20,6 @@ export default function RootLayout({
       <html lang="en">
         <body>
           <SignedOut>
-            <SignInButton />
           </SignedOut>
           <SignedIn>
             <UserButton />
@@ -27,5 +30,10 @@ export default function RootLayout({
     </ClerkProvider>
   )
 }
-
-
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <ClerkProvider frontendApi={clerkFrontendApi as string}>
+      <Component {...pageProps} />
+    </ClerkProvider>
+  );
+}
