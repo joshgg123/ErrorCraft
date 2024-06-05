@@ -15,6 +15,18 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
     suppressConsoleBootMessage: true,
     antialiasing: false,
   });
+
+    // Obtén la cantidad de monedas desde Firebase usando el userId
+    const playerMoney = await getPlayerMoneyFromDatabase(userId);
+
+    const coin = new Coin(game, {
+      x: 40,
+      y: 50  
+    });
+    game.add(coin);
+    coin.setNumberOfCoins(playerMoney);
+
+
   const grid = new Grid(game, 10, 16);
   //monedas
   const coin = new Coin(game, {
