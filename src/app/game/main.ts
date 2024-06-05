@@ -116,6 +116,20 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
     return game;
 }
 
+const getPlayerMoneyFromDatabase = async (userId: string): Promise<number> => {
+  const userDoc = await getDoc(doc(db, 'users', userId));
+  if (userDoc.exists()) {
+    return userDoc.data().coin || 0;
+  }
+  return 0;
+}
+
+const updatePlayerMoneyInDatabase = async (userId: string, money: number) => {
+  await updateDoc(doc(db, 'users', userId), {
+    coin: money
+  });
+}
+
 
 export const startGame = (game: Engine) => {
   game.start();
