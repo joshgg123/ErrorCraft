@@ -4,8 +4,6 @@ import { Player } from '../objects/player';
 import { loader,} from '../resource'; 
 import { config } from '../config';
 import { Coin } from '../componentes/coins';
-import { db } from '../firebase/page';
-import { getDoc, doc, updateDoc } from 'firebase/firestore';
 
 export const initializeGame = (canvasElement: HTMLCanvasElement) => {
   const game = new Engine({
@@ -17,20 +15,6 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
     suppressConsoleBootMessage: true,
     antialiasing: false,
   });
-
-    // Obtén la cantidad de monedas desde Firebase usando el userId
-    const playerMoney = await getPlayerMoneyFromDatabase(userId);
-
-    const coin = new Coin(game, {
-      x: 40,
-      y: 50  
-    });
-
-    
-    game.add(coin);
-    coin.setNumberOfCoins(playerMoney);
-
-
   const grid = new Grid(game, 10, 16);
   //monedas
   const coin = new Coin(game, {
@@ -131,21 +115,6 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
     });
     return game;
 }
-
-const getPlayerMoneyFromDatabase = async (userId: string): Promise<number> => {
-  const userDoc = await getDoc(doc(db, 'users', userId));
-  if (userDoc.exists()) {
-    return userDoc.data().coin || 0;
-  }
-  return 0;
-}
-
-const updatePlayerMoneyInDatabase = async (userId: string, money: number) => {
-  await updateDoc(doc(db, 'users', userId), {
-    coin: money
-  });
-}
-
 
 export const startGame = (game: Engine) => {
   game.start();
