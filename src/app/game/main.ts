@@ -4,6 +4,8 @@ import { Player } from '../objects/player';
 import { loader,} from '../resource'; 
 import { config } from '../config';
 import { Coin } from '../componentes/coins';
+import { db } from '../firebase/page';
+import { getDoc, doc, updateDoc } from 'firebase/firestore';
 
 export const initializeGame = (canvasElement: HTMLCanvasElement) => {
   const game = new Engine({
@@ -23,6 +25,8 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
       x: 40,
       y: 50  
     });
+
+    
     game.add(coin);
     coin.setNumberOfCoins(playerMoney);
 
