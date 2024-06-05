@@ -1,7 +1,5 @@
-import { Actor, Vector, Sprite, Timer, SpriteSheet, CollisionType, Animation, range} from 'excalibur';
+import { Actor, Vector, Sprite, Timer, SpriteSheet, CollisionType, Animation, Engine} from 'excalibur';
 import { Resources } from '../resource';
-import { Engine } from 'excalibur';
-import ex from 'excalibur';
 
 export class Building extends Actor {
   public constructionSprite: Sprite;
@@ -12,20 +10,19 @@ export class Building extends Actor {
   private isCompleted: boolean;
  
 
-  constructor(pos: Vector, sprite: Sprite) {
+  constructor(pos: Vector, sprite: Sprite, imagePath: string) {
     super({
       pos,
       width: 64,
       height: 64,
       collisionType: CollisionType.Fixed
     });
+
     //colision con el jugador 
     
     this.graphics.add(sprite);
-    //this.cost = cost;
     this.isCompleted = true;
-    this.mapchipSpriteSheet = SpriteSheet.fromImageSource({
-      
+    this.mapchipSpriteSheet = SpriteSheet.fromImageSource({      
       image: Resources.mapchip,
       grid: {
         rows: 31,
@@ -40,6 +37,7 @@ export class Building extends Actor {
         },
       },
     });
+
     this.BombaSpriteSheet = SpriteSheet.fromImageSource({
       image: Resources.bombaAgua,
       grid: {
@@ -57,8 +55,8 @@ export class Building extends Actor {
     this.constructionSprite.width = 64;
     this.constructionSprite.height = 64;
     this.graphics.use(this.constructionSprite);
-
   }
+
   onInitialize(engine: Engine) {
     const timer = new Timer({
       fcn: () => this.completeConstruction(),
@@ -74,12 +72,4 @@ export class Building extends Actor {
     this.graphics.use(this.completedAnimation);
     this.completedAnimation.reset();
   }
-
-
-
-
-  
-  // public getCost(): number {
-  //   return this.cost;
-  // }
 }

@@ -1,49 +1,121 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
-//import Layout from "../components/layout";
-import { Engine } from "excalibur";
-import { startGame } from "./main";
-import { Canvas } from "excalibur";
+import { useUser } from "@clerk/nextjs";
+import ChatInput from "../componentes/ChatInput";
+import { getMessages, db,  } from "../firebase/page";
+import { setDoc, doc } from "firebase/firestore";
+import { Engine, Actor, Label, vec, Font } from "excalibur";
+
+interface ChatMessageData {
+  id: string;
+  message: string;
+  user: string;
+  timestamp: Date;
+}
 
 export default function GamePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameInstance, setGameInstance] = useState<Engine | null>(null);
+  const { isLoaded, isSignedIn, user } = useUser();
+  const [messages, setMessages] = useState<ChatMessageData[]>([]);
+  const formatMessage = (msg: ChatMessageData) => `${msg.user}: ${msg.message}`;
 
   useEffect(() => {
-    let isMounted = true; 
-
+    let isMounted = true;
     if (canvasRef.current && !gameInstance) {
-      // Importa dinámicamente las funciones de inicialización y arranque del juego
       import("./main").then(({ initializeGame, startGame }) => {
         if (isMounted) {
-          // Solo procede si el componente sigue montado
           const engine = initializeGame(canvasRef.current!);
-          setGameInstance(engine); // Guarda la instancia del juego en el estado
+          setGameInstance(engine);
           startGame(engine);
+
+          // Crear un actor para el chat y agregarlo a la escena
+          const chatActor = new Actor({
+            pos: vec(200, 100), // Posición inicial del chat
+            width: 400, // Ancho del chat
+            height: 300, // Alto del chat
+          });
+
+           // Crear label para mostrar mensajes (usando Font)
+           const chatFont = new Font({
+            size: 16,
+            family: "sans-serif",
+          });
+          const chatLabel = new Label({
+            text: "",
+            pos: vec(0, 0), 
+            font: chatFont,
+          });
+          chatActor.addChild(chatLabel);
+          engine.add(chatActor);
+
+          const updateChatLabel = () => {
+            chatLabel.text = messages.map(formatMessage).join("\n"); 
+        };
+        updateChatLabel(); 
+
+          // Suscribirse a nuevos mensajes y actualizar el label
+          const unsubscribe = getMessages((newMessages) => {
+            setMessages(newMessages);
+            updateChatLabel();
+          });
+
+          // Limpieza al desmontar
+          return () => {
+            unsubscribe();
+          };
         }
       });
     }
 
-    // Función de limpieza para cuando el componente se desmonte
+    
+    // Guardar información del usuario en Firebase
+    if (user) {
+      console.log("User detected:", user); // Log para verificar que `user` está disponible
+
+      const userId = user.id;
+      const userEmail = user.emailAddresses[0].emailAddress;
+
+      const saveUserToFirebase = async () => {
+        try {
+          console.log("Saving user to Firebase:", { userId, userEmail }); // Log antes de guardar
+          await setDoc(doc(db, "users", userId), {
+            name: userEmail,
+            id: userId,
+            Coins: 2000,
+        });
+        console.log("User saved to Firebase:", { userId, userEmail }); // Log después de guardar
+        } catch (error) {
+          console.error("Error saving user to Firebase:", error); // Manejo de errores
+        }
+      };
+      saveUserToFirebase();
+    } else {
+      console.log("No user detected."); // Log cuando `user` es null o undefined
+    }
     return () => {
-      isMounted = false; // Indica que el componente se ha desmontado
+      isMounted = false;
       if (gameInstance) {
-        // Detén el juego y realiza cualquier limpieza necesaria
         gameInstance.stop();
-        setGameInstance(null); // Limpia la instancia del juego
+        setGameInstance(null);
       }
     };
-  }, [gameInstance]); // Dependencia: solo re-ejecuta este efecto si gameInstance cambia
+  }, [gameInstance]);
 
   return (
-    <>
-      <div className="fondo-about">
-          <div className="flex justify-center items-center h-screen">
-            <div className="border-8 border-stone-900">
-              <canvas ref={canvasRef} className="m-auto" />
+    <div className="fondo-about">
+      <div className="flex justify-center items-center h-screen">
+        <div className="border-8 border-stone-900 relative">
+          <canvas ref={canvasRef} className="m-auto" />
+          {isLoaded && isSignedIn && (
+            <div className="absolute bottom-0 left-0 p-4 w-full">
+              <ChatInput />
             </div>
-          </div>
+          )}
+        </div>
       </div>
-    </>
+    </div>
   );
 }
+
+

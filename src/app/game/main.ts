@@ -1,7 +1,4 @@
-import { Building } from './../objects/building';
-
 import { Engine, Actor, ScreenElement, Color, Vector } from 'excalibur';
-import * as ex from 'excalibur';
 import { Grid } from '../objects/grid';
 import { Player } from '../objects/player';
 import { loader,} from '../resource'; 
@@ -21,8 +18,8 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
   const grid = new Grid(game, 10, 16);
   //monedas
   const coin = new Coin(game, {
-    x: 50, // Ajusta la posición X según sea necesario
-    y: 50  // Ajusta la posición Y según sea necesario
+    x: 40, 
+    y: 50  
   });
   game.add(coin);
   let buildingModeActive = false;
@@ -37,15 +34,21 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
         
         const player = new Player(Vector.Zero);
         player.scale = Vector.One.scale(3);
-        game.add(player);{}
+        //Agrega al jugador en una posicion especifica
+        player.pos = new Vector(100, 100);
+        game.add(player);
         
         // --- Creación del menú ---
         const menuElement = document.createElement('div');
         menuElement.id = 'game-menu';
+        menuElement.style.position = 'absolute';
+        menuElement.style.top = '10px';
+        menuElement.style.right = '10px';
         menuElement.innerHTML = `
-            <button id="menu-button">Menú</button>
+            <button id="menu-button" aria-label = "Open Menu" Style="padding:0"><img src="assets/menu2.png" alt="menu-icon"></button>
             <div id="menu-content" style="display: none;">
-                <img src="" alt="Imagen 1" data-building-type="Home">
+                <img src="assets/WaterBomb.png" alt="Imagen 1" data-building-type="Home">
+                <img src="assets/fabrica.png" alt="Imagen 2" data-building-type="Factory">
             </div>
         `;
         document.body.appendChild(menuElement);
@@ -112,7 +115,6 @@ export const initializeGame = (canvasElement: HTMLCanvasElement) => {
     });
     return game;
 }
-
 
 export const startGame = (game: Engine) => {
   game.start();

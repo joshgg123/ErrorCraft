@@ -2,32 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.Menu {
+    background-image: url('../../public/assets/backgroundMenu.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh; /* Esto asegura que el fondo cubra toda la ventana */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+.header {
+    position: fixed;
+    top: 20px;
+    left: 20px; /* Mover la sección de los botones al lado izquierdo */
+    z-index: 1000; /* Asegura que los botones estén por encima del contenido */
   }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  
+  .signin-button {
+    background-color: white; /* Agrega un fondo blanco al botón de inicio de sesión */
+    padding: 10px 20px; /* Ajusta el relleno según sea necesario */
+    border-radius: 4px; /* Redondea las esquinas del botón */
+    margin-bottom: 10px; /* Espacio entre los botones */
   }
+.Titulo {
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    font-size: 2.25rem;
+    margin-bottom: 0,5rem;
+    color: #000;
 }

@@ -1,7 +1,8 @@
-import { Engine, Sprite, SpriteSheet, TileMap, Vector } from "excalibur";
+import { Engine, Sprite, SpriteSheet, TileMap, Vector, ImageSource } from 'excalibur'
 import { config } from "../config";
 import { Resources } from "../resource";
-import { Building } from "./building"; // Importa la clase Building
+import { Building } from "./building"; 
+
 
 export class Grid {
   public backgroundMap!: TileMap;
@@ -92,7 +93,7 @@ export class Grid {
             console.warn(`No se pudo obtener el tile en la posición (${pos.col}, ${pos.row})`);
         }
     }
-   this.buildings.push(new Building(this.getTileCenter(col, row), this.carpaSprites[0],));
+   this.buildings.push(new Building(this.getTileCenter(col, row), this.carpaSprites[0], "Carpa"));
     
 }
 
@@ -102,7 +103,7 @@ buildBuilding(engine: Engine, row: number, col: number, playerMoney: number, bui
 
       const buildingSprite = this.getBuildingSprite(buildingType);
       if (buildingSprite) {
-          const building = new Building(pos, buildingSprite);
+          const building = new Building(pos, buildingSprite, buildingType);
           this.buildings.push(building);
           engine.add(building);
           return playerMoney - buildingCost;
@@ -115,17 +116,32 @@ buildBuilding(engine: Engine, row: number, col: number, playerMoney: number, bui
       return playerMoney;
   }
 }
-  getBuildingSprite(buildingType: string): Sprite | null {
-    // Asegúrate de tener los sprites de los edificios cargados en Resources
-    switch (buildingType) {
-        case 'Home':
-            const completedImageSprite =  this.mapchipSpriteSheet.getSprite(54, 18)!;
-            return completedImageSprite ? completedImageSprite.clone() : null;
-        // Agrega más casos para otros tipos de edificios
-        default:
-            console.error(`Tipo de edificio desconocido: ${buildingType}`);
-            return null;
-    }
+getBuildingSprite(buildingType: string): Sprite | null {
+  switch (buildingType) {
+      case 'Home':
+          const spriteSheetSprite = this.mapchipSpriteSheet.getSprite(54, 18);
+          if (spriteSheetSprite) {
+              return spriteSheetSprite.clone();
+          }
+          break; 
+
+      // ... otros casos para sprites de SpriteSheet
+     
+      // Casos para imágenes simples: 
+      case 'Factory': 
+          const imageSource = Resources.factory; 
+          if (imageSource) {
+              return new Sprite({ 
+                  image: imageSource,
+              }); 
+          }
+          break;
+
+      default:
+          console.error(`Tipo de edificio desconocido: ${buildingType}`);
+          return null;
+  }
+  return null;
 }
 
 isTileOccupied(col: number, row: number): boolean {
