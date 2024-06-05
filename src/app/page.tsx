@@ -18,7 +18,7 @@ const Menu: React.FC = () => {
     return (
       <div className='Menu'>
           <div className="text-center text-white font-sans">
-            <h1 className="text-4xl mb-6 text-black">Menú del Juego</h1>
+            <h1 className="Titulo">ErrorCraft</h1>
             <button 
                 onClick={startGame} 
                 className="block w-48 mx-auto py-2 my-2 text-lg font-semibold cursor-pointer border-none rounded bg-blue-400 text-gray-800 hover:bg-blue-600"
