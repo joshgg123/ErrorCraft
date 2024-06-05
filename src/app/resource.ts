@@ -1,15 +1,17 @@
 import { ImageSource, Loader } from "excalibur";
-import mapchipPng from "../../public/assets/pasto.png";
 
-import completed from "../../public/assets/Hero 01.png";
+import mapchipPng from "../../public/assets/pasto.png";
+import menuLogo from "../../public/assets/menu2.png"
 import pasto from "../../public/assets/pastoSprite.png"
 import coins from "../../public/assets/coin_Sheet32x32.png"
 import heroPath from "../../public/assets/Hero 01.png"
 import {Player} from "./objects/player";
 import bombaAgua from "../../public/assets/bombaAgua.png"
 import factory from "../../public/assets/fabrica.png"
-
+import waterbomb from "../../public/assets/WaterBomb.png"
 export const Resources = {
+    waterbomb: new ImageSource(waterbomb.src),
+    menuLogo: new ImageSource(menuLogo.src),
     mapchip: new ImageSource(mapchipPng.src),
     pasto: new ImageSource(pasto.src),
     coin: new ImageSource(coins.src), 

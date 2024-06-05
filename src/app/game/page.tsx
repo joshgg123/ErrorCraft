@@ -2,8 +2,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Engine } from "excalibur";
 import { useUser } from "@clerk/nextjs";
-import { doc, setDoc } from "firebase/firestore";
+import { addDoc, doc, setDoc, collection, getDoc} from "firebase/firestore";
 import { db } from "../firebase/page";
+import { Coin } from "../componentes/coins";
 
 const GamePage: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -14,9 +15,9 @@ const GamePage: React.FC = () => {
     let isMounted = true;
 
     if (canvasRef.current && !gameInstance) {
-      import("./main").then(({ initializeGame, startGame }) => {
+      import("./main").then(async ({ initializeGame, startGame }) => {
         if (isMounted) {
-          const engine = initializeGame(canvasRef.current!);
+          const engine = await initializeGame(canvasRef.current!, user?.id || "");
           setGameInstance(engine);
           startGame(engine);
         }
@@ -33,11 +34,22 @@ const GamePage: React.FC = () => {
       const saveUserToFirebase = async () => {
         
           console.log("Saving user to Firebase:", { userId, userName }); // Log antes de guardar
-
-          await setDoc(doc(db, "users", userId), {
-            name: userName,
-            id: userId
-          });
+          //comprobar si esta en la base de datos y si no agregarlo
+          const userRef = doc(db, "users", userId);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            console.log("User already exists in Firebase:", { userId, userName });
+            return;
+          }
+          else {
+            console.log("User does not exist in Firebase:", { userId, userName });
+            await addDoc(collection(db, "users"), {
+              name: userName,
+              id: userId,
+              Coins: 2000,
+              
+            });
+          }
           console.log("User saved to Firebase:", { userId, userName }); // Log después de guardar
         
       };

@@ -10,6 +10,8 @@ export class Grid {
   public pastoSprite:Sprite;
   public carpaSprites: Sprite[];
   private buildings: Building[] = [];
+  
+
 
 
   constructor(engine: Engine, numOfRow: number, numOfCol: number) {
