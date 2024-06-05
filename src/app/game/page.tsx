@@ -2,8 +2,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import ChatInput from "../componentes/ChatInput";
-import { getMessages, db } from "../firebase/page";
-import {doc, setDoc} from "firebase/firestore";
+import { getMessages, db,  } from "../firebase/page";
+import { setDoc, doc } from "firebase/firestore";
 import { Engine, Actor, Label, vec, Font } from "excalibur";
 
 interface ChatMessageData {
@@ -18,6 +18,7 @@ export default function GamePage() {
   const [gameInstance, setGameInstance] = useState<Engine | null>(null);
   const { isLoaded, isSignedIn, user } = useUser();
   const [messages, setMessages] = useState<ChatMessageData[]>([]);
+  const formatMessage = (msg: ChatMessageData) => `${msg.user}: ${msg.message}`;
 
   useEffect(() => {
     let isMounted = true;
@@ -48,13 +49,10 @@ export default function GamePage() {
           chatActor.addChild(chatLabel);
           engine.add(chatActor);
 
-          // Actualizar label del chat
           const updateChatLabel = () => {
-            chatLabel.text = messages
-              .map((msg) => `${msg.user}: ${msg.message}`)
-              .join("\n");
-          };
-          updateChatLabel();
+            chatLabel.text = messages.map(formatMessage).join("\n"); 
+        };
+        updateChatLabel(); 
 
           // Suscribirse a nuevos mensajes y actualizar el label
           const unsubscribe = getMessages((newMessages) => {
@@ -70,21 +68,31 @@ export default function GamePage() {
       });
     }
 
-    if(user) {
-      console.log("Usuario Detectado:", user);
-      const userId = user.id;
-      const userName = user.fullName ?? user.emailAddresses[0].emailAddress;
-      const saveUserToFirebase = async () => {
-        console.log("Guardando usuario en Firebase...", { userId, userName });
-        await setDoc(doc(db, "users", userId), { name: userName, id: userId });
-        console.log("Usuario guardado", { userId, userName });
-      }
+    
+    // Guardar información del usuario en Firebase
+    if (user) {
+      console.log("User detected:", user); // Log para verificar que `user` está disponible
 
+      const userId = user.id;
+      const userEmail = user.emailAddresses[0].emailAddress;
+
+      const saveUserToFirebase = async () => {
+        try {
+          console.log("Saving user to Firebase:", { userId, userEmail }); // Log antes de guardar
+          await setDoc(doc(db, "users", userId), {
+            name: userEmail,
+            id: userId,
+            Coins: 2000,
+        });
+        console.log("User saved to Firebase:", { userId, userEmail }); // Log después de guardar
+        } catch (error) {
+          console.error("Error saving user to Firebase:", error); // Manejo de errores
+        }
+      };
       saveUserToFirebase();
     } else {
-      console.log("Usuario no detectado");
+      console.log("No user detected."); // Log cuando `user` es null o undefined
     }
-
     return () => {
       isMounted = false;
       if (gameInstance) {
