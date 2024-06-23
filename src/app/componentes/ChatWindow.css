@@ -1,0 +1,34 @@
+.chat-window {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    padding: 16px;
+  }
+  
+  .chat-container {
+    display: flex;
+    flex-direction: row;
+    height: 80vh;
+  }
+  
+  .user-list, .chat-area, .functions-panel {
+    flex: 1;
+    padding: 16px;
+    border-right: 1px solid #ccc;
+  }
+  
+  .chat-area {
+    flex: 2;
+  }
+  
+  .message-list {
+    flex: 1;
+    overflow-y: auto;
+  }
+  
+  .message-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  
