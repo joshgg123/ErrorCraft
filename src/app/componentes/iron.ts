@@ -1,6 +1,6 @@
 import * as ex from 'excalibur';
 import { Resources } from '../resource'; // Ajusta la ruta según sea necesario
-import { Engine, Vector, Animation, SpriteSheet, ImageSource } from "excalibur";
+import { Engine, Vector, Animation, SpriteSheet, ImageSource,Sprite } from "excalibur";
 
 interface CoinOptions {
   
@@ -9,9 +9,10 @@ interface CoinOptions {
   z?: number;
 }
 
-export class Coin extends ex.Actor {
+export class Iron extends ex.Actor {
   private numberOfCoins: number;
   private label: ex.Label;
+  private coin: Sprite;
 
   constructor(engine: Engine, options: CoinOptions) {
     super({
@@ -21,30 +22,16 @@ export class Coin extends ex.Actor {
       z: options.z
     });
     //inicializacion de
-    this.numberOfCoins = 2000;
+    this.numberOfCoins = 0;
+    this.coin = Resources.ironOre.toSprite();
+    this.graphics.use(this.coin);
 
-    // Crear la spritesheet
-    const coinSpriteSheet = ex.SpriteSheet.fromImageSource({
-      image: Resources.coin as ImageSource,
-      grid: {
-        rows: 1,
-        columns: 10,
-        spriteWidth: 32,
-        spriteHeight: 32
-      }
-    });
-
-    // Crear una animación a partir de la spritesheet
-    const coinAnimation = ex.Animation.fromSpriteSheet(coinSpriteSheet, ex.range(0, 7), 100);
-
-    // Usar la animación en lugar de un sprite estático
-    this.graphics.use(coinAnimation);
-
+   
     // Crear la etiqueta
     this.label = new ex.Label({
       z: 1000,
       text: `${this.numberOfCoins}`,
-      pos: new ex.Vector(35, 3.5), // Ajusta la posición de la etiqueta según sea necesario
+      pos: new ex.Vector(40, 15), // Ajusta la posición de la etiqueta según sea necesario
       font: new ex.Font({
         size: 24,
         unit: ex.FontUnit.Px,

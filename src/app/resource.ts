@@ -1,15 +1,23 @@
 import { ImageSource, Loader } from "excalibur";
 
-import mapchipPng from "../../public/assets/pasto.png";
-import menuLogo from "../../public/assets/menu2.png"
-import pasto from "../../public/assets/pastoSprite.png"
-import coins from "../../public/assets/coin_Sheet32x32.png"
-import heroPath from "../../public/assets/Hero 01.png"
+import mapchipPng from "../../public/assets/pasto.png";//
+import menuLogo from "../../public/assets/menu2.png"//
+import pasto from "../../public/assets/pastoSprite.png"//
+import coins from "../../public/assets/coin_Sheet32x32.png"//
+import heroPath from "../../public/assets/Hero 01.png"//
 import {Player} from "./objects/player";
-import bombaAgua from "../../public/assets/bombaAgua.png"
-import factory from "../../public/assets/fabrica.png"
-import waterbomb from "../../public/assets/WaterBomb.png"
+import bombaAgua from "../../public/assets/bombaAgua.png"//
+import factory from "../../public/assets/fabrica.png"//
+import waterbomb from "../../public/assets/WaterBomb.png"//si
+import fabric_anim from "../../public/assets/fabrica_anim.png"//si
+import iron from "../../public/assets/iron.png"//si
+import ironAnim from "../../public/assets/ironAnim.png"//si
+import ironOre from "../../public/assets/iron_ore.png"//si
 export const Resources = {
+    ironOre: new ImageSource(ironOre.src),
+    iron: new ImageSource(iron.src),
+    ironAnim: new ImageSource(ironAnim.src),
+    fabric_anim: new ImageSource(fabric_anim.src),
     waterbomb: new ImageSource(waterbomb.src),
     menuLogo: new ImageSource(menuLogo.src),
     mapchip: new ImageSource(mapchipPng.src),
@@ -27,4 +35,4 @@ export const Resources = {
     bombaAgua: new ImageSource(bombaAgua.src)
 
 };
-export const loader = new Loader([Resources.mapchip, Resources.factory, Resources.bombaAgua,Resources.HeroSpriteSheetPng, Resources.coin, Resources.pasto]); // Agrega todos los recursos aquí
+export const loader = new Loader([Resources.ironOre,Resources.waterbomb,Resources.mapchip,Resources.iron ,Resources.ironAnim,Resources.fabric_anim, Resources.factory, Resources.bombaAgua,Resources.HeroSpriteSheetPng, Resources.coin, Resources.pasto]); // Agrega todos los recursos aquí
