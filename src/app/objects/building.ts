@@ -6,7 +6,6 @@ export class Building extends Actor {
   public BombaSpriteSheet: SpriteSheet;
   public mapchipSpriteSheet: SpriteSheet;
   public completedAnimation: Animation;
-  //public cost: number;
   private isCompleted: boolean;
  
 

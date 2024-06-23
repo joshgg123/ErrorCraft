@@ -1,10 +1,11 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
-import { useUser } from "@clerk/nextjs";
-import ChatInput from "../componentes/ChatInput";
-import { getMessages, db,  } from "../firebase/page";
+import { useUser } from "@clerk/nextjs"; // Importar useClient desde Clerk
+import { getMessages, db } from "../firebase/page";
 import { setDoc, doc } from "firebase/firestore";
 import { Engine, Actor, Label, vec, Font } from "excalibur";
+import ChatWindow from "../componentes/ChatWindow";
+import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
 
 interface ChatMessageData {
   id: string;
@@ -13,11 +14,14 @@ interface ChatMessageData {
   timestamp: Date;
 }
 
+const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
 export default function GamePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameInstance, setGameInstance] = useState<Engine | null>(null);
   const { isLoaded, isSignedIn, user } = useUser();
   const [messages, setMessages] = useState<ChatMessageData[]>([]);
+  const [chatOpen, setChatOpen] = useState(false); // Estado para controlar la apertura y cierre del chat
   const formatMessage = (msg: ChatMessageData) => `${msg.user}: ${msg.message}`;
 
   useEffect(() => {
@@ -29,38 +33,34 @@ export default function GamePage() {
           setGameInstance(engine);
           startGame(engine);
 
-          // Crear un actor para el chat y agregarlo a la escena
           const chatActor = new Actor({
-            pos: vec(200, 100), // Posición inicial del chat
-            width: 400, // Ancho del chat
-            height: 300, // Alto del chat
+            pos: vec(200, 100),
+            width: 400,
+            height: 300,
           });
 
-           // Crear label para mostrar mensajes (usando Font)
-           const chatFont = new Font({
+          const chatFont = new Font({
             size: 16,
             family: "sans-serif",
           });
           const chatLabel = new Label({
             text: "",
-            pos: vec(0, 0), 
+            pos: vec(0, 0),
             font: chatFont,
           });
           chatActor.addChild(chatLabel);
           engine.add(chatActor);
 
           const updateChatLabel = () => {
-            chatLabel.text = messages.map(formatMessage).join("\n"); 
-        };
-        updateChatLabel(); 
+            chatLabel.text = messages.map(formatMessage).join("\n");
+          };
+          updateChatLabel();
 
-          // Suscribirse a nuevos mensajes y actualizar el label
           const unsubscribe = getMessages((newMessages) => {
             setMessages(newMessages);
             updateChatLabel();
           });
 
-          // Limpieza al desmontar
           return () => {
             unsubscribe();
           };
@@ -68,31 +68,24 @@ export default function GamePage() {
       });
     }
 
-    
-    // Guardar información del usuario en Firebase
     if (user) {
-      console.log("User detected:", user); // Log para verificar que `user` está disponible
-
       const userId = user.id;
       const userEmail = user.emailAddresses[0].emailAddress;
 
       const saveUserToFirebase = async () => {
         try {
-          console.log("Saving user to Firebase:", { userId, userEmail }); // Log antes de guardar
           await setDoc(doc(db, "users", userId), {
             name: userEmail,
             id: userId,
             Coins: 2000,
-        });
-        console.log("User saved to Firebase:", { userId, userEmail }); // Log después de guardar
+          });
         } catch (error) {
-          console.error("Error saving user to Firebase:", error); // Manejo de errores
+          console.error("Error saving user to Firebase:", error);
         }
       };
       saveUserToFirebase();
-    } else {
-      console.log("No user detected."); // Log cuando `user` es null o undefined
     }
+
     return () => {
       isMounted = false;
       if (gameInstance) {
@@ -102,20 +95,33 @@ export default function GamePage() {
     };
   }, [gameInstance]);
 
+  if (!clerkPublishableKey) {
+    return <div>Error: Clerk publishable key is not set.</div>;
+  }
+
   return (
     <div className="fondo-about">
       <div className="flex justify-center items-center h-screen">
         <div className="border-8 border-stone-900 relative">
           <canvas ref={canvasRef} className="m-auto" />
-          {isLoaded && isSignedIn && (
-            <div className="absolute bottom-0 left-0 p-4 w-full">
-              <ChatInput />
-            </div>
-          )}
+          <button className="queonda">Que onda</button>
+          <ClerkProvider publishableKey={clerkPublishableKey}>
+            <SignedIn>
+              {isLoaded && isSignedIn && (
+                <div className="absolute bottom-0 left-0 p-4 w-full">
+                  <button className="open-chat-button" onClick={() => setChatOpen(!chatOpen)}>
+  {chatOpen ? "Cerrar Chat" : "Abrir Chat"}
+</button>
+                  {chatOpen && <ChatWindow onClose={() => setChatOpen(false)} />}
+                </div>
+              )}
+            </SignedIn>
+            <SignedOut>
+              <RedirectToSignIn />
+            </SignedOut>
+          </ClerkProvider>
         </div>
       </div>
     </div>
   );
 }
-
-

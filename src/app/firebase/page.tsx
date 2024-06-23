@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
+import { Message } from "../componentes/types";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDjPoIyEJ0xjH98l7c6WP2xxPFD9lsGjLM",
@@ -15,14 +16,14 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app); 
-const auth = getAuth(app);
+export const auth = getAuth(app);
 
-export async function sendMessage(message: string, user: string) {
+export async function sendMessage(message: Message): Promise<void> {
   try {
-    const newMessageRef = await addDoc(collection(db, "messages"), {
-      message,
-      user,
-      timestamp: new Date(),
+    const newMessageRef = await addDoc(collection(db, 'messages'), {
+      message: message.text,
+      user: message.user,
+      timestamp: message.timestamp,
     });
     console.log("Mensaje guardado con ID:", newMessageRef.id); // Mensaje de confirmación
   } catch (error) {

@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #000000;
+    color: #000;
+}
+
 .Menu {
     background-image: url('../../public/assets/backgroundMenu.jpg');
     background-size: cover;
@@ -32,3 +41,14 @@
     margin-bottom: 0,5rem;
     color: #000;
 }
+
+/* Dentro de GamePage.css */
+
+.open-chat-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
