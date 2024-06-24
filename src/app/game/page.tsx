@@ -1,7 +1,8 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
-import { getMessages, db } from "../firebase/page";
+import { getMessages } from "../firebase/getMessages";
+import { db } from "../firebase/page";
 import { setDoc, doc, getDoc, collection, onSnapshot } from "firebase/firestore";
 import { Engine } from "excalibur";
 import ChatWindow from "../componentes/ChatWindow";

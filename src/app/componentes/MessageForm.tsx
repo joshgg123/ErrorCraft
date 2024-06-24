@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { sendMessage } from '../firebase/page';
+import { sendMessage } from '../firebase/sendMessages';
 import { ChatMessageData } from '../componentes/types';
-import { text } from 'stream/consumers';
 
 interface MessageFormProps {
   user: string;
