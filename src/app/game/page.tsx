@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { getMessages, db } from "../firebase/page";
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc, getDoc, collection, onSnapshot } from "firebase/firestore";
 import { Engine } from "excalibur";
 import ChatWindow from "../componentes/ChatWindow";
 import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
@@ -53,6 +53,16 @@ export default function GamePage() {
       }
     };
 
+    const unsubscribe = onSnapshot(collection(db, "messages"), (snapshot) => {
+      const newMessages: ChatMessageData[] = [];
+      snapshot.forEach((doc) => {
+        newMessages.push({ id: doc.id, ...doc.data() } as ChatMessageData);
+      });
+      setMessages(newMessages);
+    }
+    );
+
+
     // Suscripción al chat solo si el usuario está guardado
     const unsubscribeChat = userSaved ? getMessages((newMessages) => {
       setMessages(newMessages);
@@ -63,6 +73,7 @@ export default function GamePage() {
     return () => {
       isMounted = false;
       unsubscribeChat();
+      unsubscribe();
       if (gameInstance) {
         gameInstance.stop();
         setGameInstance(null);
