@@ -18,8 +18,8 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages }) =>
     if (selectedUser) {
       // Filtrar mensajes para el usuario seleccionado
       const filtered = messages.filter(msg =>
-        (msg.user === selectedUser.id && msg.receiver === user?.id) || // Mensajes enviados al usuario actual
-        (msg.user === user?.id && msg.receiver === selectedUser.id)    // Mensajes enviados por el usuario actual
+        (msg.user === selectedUser.name && msg.receiver === user?.fullName) || // Mensajes enviados al usuario actual
+        (msg.user === user?.fullName && msg.receiver === selectedUser.name)    // Mensajes enviados por el usuario actual
       );
       setFilteredMessages(filtered);
     }
@@ -38,12 +38,12 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages }) =>
       <h2>Chat con {selectedUser.name}</h2>
       <MessageList
         messages={filteredMessages}
-        currentUser={user?.id ?? ''}
+        currentUser={user?.fullName ?? ''}
       />
       {user && (
         <MessageForm
-          user={user?.id ?? ''}
-          receiver={selectedUser.id} // Asegúrate de pasar 'receiver' aquí
+          user={user?.fullName ?? ''}
+          receiver={selectedUser.name} // Asegúrate de pasar 'receiver' aquí
         />
       )}
     </div>
