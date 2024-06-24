@@ -26,6 +26,7 @@ export interface ChatMessageData {
     receiver: string; // Agregamos 'receiver' como prop
     timestamp: Date;
   }
+  
 
   export interface MessageListProps {
     userId: string;
