@@ -72,7 +72,7 @@
   }
   
   .message-time {
-    @apply text-xs text-gray-500; /* Hora en tamaño pequeño y color gris claro */
+    @apply text-xs text-black; /* Hora en tamaño pequeño y color gris claro */
   }
   
   .message-text {
