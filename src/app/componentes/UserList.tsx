@@ -27,10 +27,24 @@ const UserList: React.FC<UserListProps> = ({ onSelectUser }) => {
     fetchUsers();
   }, [user]); // Agrega user como dependencia del useEffect
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, user: User) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onSelectUser(user);
+    }
+  };
+
   return (
     <div className="user-list">
       {users.map(user => (
-        <div key={user.id} onClick={() => onSelectUser(user)}>
+        <div 
+          key={user.id} 
+          onClick={() => onSelectUser(user)}
+          onKeyDown={(e) => handleKeyDown(e, user)}
+          role="button"
+          tabIndex={0}
+          style={{ cursor: 'pointer' }}
+        >
           {user.name}
         </div>
       ))}
@@ -39,6 +53,9 @@ const UserList: React.FC<UserListProps> = ({ onSelectUser }) => {
 };
 
 export default UserList;
+
+
+
 
 
 

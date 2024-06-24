@@ -1,28 +1,30 @@
 import React, { useState } from 'react';
 import { sendMessage } from '../firebase/page';
-import { Message, User } from '../componentes/types';
-import {useUser} from "@clerk/nextjs";
+import { Message, User, ChatMessageData } from '../componentes/types';
+import { useUser } from "@clerk/nextjs";
 
 interface MessageFormProps {
   user: User;
   selectedUser: string;
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessageData[]>>; // Añadir esto
 }
 
-const MessageForm: React.FC<MessageFormProps> = ({ selectedUser }) => {
+const MessageForm: React.FC<MessageFormProps> = ({ user, selectedUser, setMessages }) => { // Añadir user aquí
   const [message, setMessage] = useState('');
-  const { user } = useUser(); 
+  const { user: currentUser } = useUser(); 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (message.trim() && user) { 
+    if (message.trim() && currentUser) { 
       const newMessage: Message = {
         id: '', 
         text: message,
-        user: user.fullName ?? user.emailAddresses[0].emailAddress, 
+        user: currentUser.fullName ?? currentUser.emailAddresses[0].emailAddress, 
         timestamp: new Date(),
       };
       try {
         await sendMessage(newMessage, selectedUser); 
+        setMessages(prevMessages => [...prevMessages, newMessage]); // Añadir esto
         setMessage('');
       } catch (error) {
         console.error('Error al enviar el mensaje:', error);
@@ -44,3 +46,4 @@ const MessageForm: React.FC<MessageFormProps> = ({ selectedUser }) => {
 };
 
 export default MessageForm;
+

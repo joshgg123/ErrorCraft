@@ -1,5 +1,3 @@
-// src/app/componentes/ChatWindow.tsx
-
 import React, { useEffect } from 'react';
 import UserList from '../componentes/UserList';
 import ChatArea from '../componentes/ChatArea';

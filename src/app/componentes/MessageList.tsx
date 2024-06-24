@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { ChatMessageData } from '../componentes/types';
 
 interface MessageListProps {
@@ -26,6 +26,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, currentUser }) => {
 };
 
 export default MessageList;
+
 
 
 

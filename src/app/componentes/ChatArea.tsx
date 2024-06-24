@@ -24,17 +24,10 @@ const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages, setMessages
     return <div className="chat-area">Selecciona un usuario para chatear</div>;
   }
 
-
-  console.log("Mensajes en chatarea:", messages);
-
-  // Filtrar mensajes para el usuario seleccionado
   const filteredMessages = messages && messages.length > 0 ? messages.filter(msg => 
     msg.participants.includes(selectedUser.id) && 
     msg.participants.includes(user?.id ?? '')
   ) : [];
-
-  console.log("Mensajes filtrados:", filteredMessages);
-  
 
   return (
     <div className="chat-area">
@@ -43,17 +36,17 @@ const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages, setMessages
         messages={filteredMessages}
         currentUser={user ? (user.fullName ?? user.emailAddresses[0].emailAddress) : ''}
       /> 
-      {/*                                                                                ^-- Pasamos currentUser acá */}
       {user && (
-    <MessageForm 
-      user={user.fullName ?? user.emailAddresses[0].emailAddress} // Extraer el nombre o email del usuario
-      selectedUser={selectedUser?.id ?? ""}  
-      setMessages={setMessages} 
-    />
-  )}
+        <MessageForm 
+          user={user}
+          selectedUser={selectedUser?.id ?? ""}  
+          setMessages={setMessages} 
+        />
+      )}
     </div>
   );
 };
+
 
 export default ChatArea;
 

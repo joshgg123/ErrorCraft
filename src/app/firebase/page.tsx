@@ -20,12 +20,12 @@ export const auth = getAuth(app);
 
 export async function sendMessage(message: Message, selectedUserId: string): Promise<void> {
   try {
-    await addDoc(collection(db, 'messages'), {
+    const docRef = await addDoc(collection(db, 'messages'), {
       ...message,
       createdAt: serverTimestamp(),
       participants: [message.user, selectedUserId], 
     });
-    console.log("Mensaje guardado con ID:"); 
+    console.log("Mensaje guardado con ID:", docRef.id); 
   } catch (error) {
     console.error("Error al guardar mensaje:", error);
     throw error;
