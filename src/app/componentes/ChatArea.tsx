@@ -35,7 +35,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages }) =>
 
   return (
     <div className="chat-area">
-      <h2>Chat con {selectedUser.name}</h2>
+      <h2>{selectedUser.name}</h2>
       <MessageList
         messages={filteredMessages}
         currentUser={user?.fullName ?? ''}
