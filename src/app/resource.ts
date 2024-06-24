@@ -7,13 +7,15 @@ import coins from "../../public/assets/coin_Sheet32x32.png"//
 import heroPath from "../../public/assets/Hero 01.png"//
 import {Player} from "./objects/player";
 import bombaAgua from "../../public/assets/bombaAgua.png"//
-import factory from "../../public/assets/fabrica.png"//
+import factory from "../../public/assets/fabrica.png"//si
 import waterbomb from "../../public/assets/WaterBomb.png"//si
 import fabric_anim from "../../public/assets/fabrica_anim.png"//si
 import iron from "../../public/assets/iron.png"//si
 import ironAnim from "../../public/assets/ironAnim.png"//si
 import ironOre from "../../public/assets/iron_ore.png"//si
+import addworker from "../../public/assets/add-workers.png"//si
 export const Resources = {
+    addworker: new ImageSource(addworker.src),
     ironOre: new ImageSource(ironOre.src),
     iron: new ImageSource(iron.src),
     ironAnim: new ImageSource(ironAnim.src),
@@ -35,4 +37,4 @@ export const Resources = {
     bombaAgua: new ImageSource(bombaAgua.src)
 
 };
-export const loader = new Loader([Resources.ironOre,Resources.menuLogo,Resources.waterbomb,Resources.mapchip,Resources.iron ,Resources.ironAnim,Resources.fabric_anim, Resources.factory, Resources.bombaAgua,Resources.HeroSpriteSheetPng, Resources.coin, Resources.pasto, Resources.menuLogo]); // Agrega todos los recursos aquí
+export const loader = new Loader([Resources.ironOre,Resources.addworker,Resources.waterbomb,Resources.mapchip,Resources.iron ,Resources.ironAnim,Resources.fabric_anim, Resources.factory, Resources.bombaAgua,Resources.HeroSpriteSheetPng, Resources.coin, Resources.pasto, Resources.menuLogo]); // Agrega todos los recursos aquí
