@@ -20,7 +20,7 @@ export const auth = getAuth(app);
 export async function sendMessage(message: Message): Promise<void> {
   try {
     const newMessageRef = await addDoc(collection(db, 'messages'), {
-      message: message.text,
+      message: message.texto,
       user: message.user,
       timestamp: message.timestamp,
     });
