@@ -38,7 +38,7 @@ export default function GamePage() {
         });
 
         const userId = user.id;
-        const userName = user.fullName || user.emailAddresses[0].emailAddress;
+        const userName = user.fullName ?? user.emailAddresses[0].emailAddress;
 
         const userRef = doc(db, "users", userId);
         const userSnap = await getDoc(userRef);
