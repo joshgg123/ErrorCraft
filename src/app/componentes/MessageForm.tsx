@@ -40,7 +40,11 @@ const MessageForm: React.FC<MessageFormProps> = ({ user }) => {
   );
 };
 
+<<<<<<< HEAD
 export default MessageForm;
 
 
 
+=======
+export default MessageForm;
+>>>>>>> BrunoJoshua

@@ -25,6 +25,15 @@ export interface ChatMessageData {
     timestamp: Date;
   }
 
+<<<<<<< HEAD
 
 
   
+=======
+  export interface MessageListProps {
+    userId: string;
+    messages: ChatMessageData[];
+  }
+
+
+>>>>>>> BrunoJoshua

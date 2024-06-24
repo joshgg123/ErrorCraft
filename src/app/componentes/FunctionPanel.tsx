@@ -9,4 +9,8 @@ const FunctionPanel = () => {
   );
 };
 
+<<<<<<< HEAD
 export default FunctionPanel;
+=======
+export default FunctionPanel;
+>>>>>>> BrunoJoshua
