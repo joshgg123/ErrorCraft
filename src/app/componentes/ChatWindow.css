@@ -1,0 +1,83 @@
+/* Contenedor principal del chat */
+.chat-window {
+    @apply bg-gray-800 text-white rounded-md shadow-md p-4 fixed bottom-0 left-0 w-1/2 h-3/4; 
+    /* Fondo oscuro, texto blanco, bordes redondeados, sombra, fijo en la parte inferior izquierda, 
+       ocupa la mitad del ancho y 3/4 de la altura de la pantalla */
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Scroll vertical si el contenido es muy largo */
+  }
+  
+  /* Contenedor de las secciones (usuarios, chat, funciones) */
+  .chat-container {
+    @apply flex flex-row h-full; /* Flexbox para dividir en secciones, ocupa toda la altura disponible */
+  }
+  
+  /* Lista de usuarios (izquierda) */
+  .user-list {
+    @apply w-1/4 p-4 border-r border-gray-700; /* Ocupa 1/4 del ancho, relleno y borde derecho */
+  }
+  
+  .user-list div {
+    @apply p-2 cursor-pointer hover:bg-gray-700; /* Relleno, cursor y efecto hover */
+  }
+  
+  /* Área de chat (centro) */
+  .chat-area {
+    @apply w-1/2 p-4 flex flex-col; /* Ocupa 1/2 del ancho, relleno y flexbox vertical */
+  }
+  
+  .message-list {
+    @apply flex-grow; /* Ocupa el espacio disponible */
+    overflow-y: auto; /* Scroll vertical si los mensajes ocupan más espacio */
+  }
+  
+  .message {
+    @apply p-2 rounded-md mb-2; /* Relleno, bordes redondeados y margen inferior */
+  }
+  
+  .message.user {
+    @apply bg-blue-500 text-white self-end; /* Mensajes del usuario a la derecha */
+  }
+  
+  .message.other {
+    @apply bg-gray-700 self-start; /* Mensajes de otros usuarios a la izquierda */
+  }
+  
+  /* Formulario de mensajes */
+  .message-form {
+    @apply flex;
+  }
+  
+  .message-form input {
+    color: black;
+    @apply flex-grow p-2 rounded-l-md border border-gray-600; /* Input que ocupa el espacio disponible */
+  }
+  
+  .message-form button {
+    @apply bg-blue-500 text-white p-2 rounded-r-md; /* Botón de enviar */
+  }
+  
+  /* Panel de funciones (derecha) */
+  .functions-panel {
+    @apply w-1/4 p-4; /* Ocupa 1/4 del ancho y tiene relleno */
+  }
+
+  .message-header {
+    @apply flex justify-between items-center mb-1; /* Alinea los elementos horizontalmente */
+  }
+  
+  .message-sender {
+    @apply font-semibold; /* Nombre de usuario en negrita */
+  }
+  
+  .message-time {
+    @apply text-xs text-black; /* Hora en tamaño pequeño y color gris claro */
+  }
+  
+  .message-text {
+    @apply whitespace-pre-wrap; /* Permite saltos de línea en el texto */
+  }
+  
+  
+  
