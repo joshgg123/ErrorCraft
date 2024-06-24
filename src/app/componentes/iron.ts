@@ -1,6 +1,6 @@
 import * as ex from 'excalibur';
 import { Resources } from '../resource'; // Ajusta la ruta según sea necesario
-import { Engine, Vector, Animation, SpriteSheet, ImageSource,Sprite } from "excalibur";
+import { Engine, Sprite } from "excalibur";
 
 interface CoinOptions {
   

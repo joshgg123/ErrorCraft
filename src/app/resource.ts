@@ -14,7 +14,7 @@ import iron from "../../public/assets/iron.png"//si
 import ironAnim from "../../public/assets/ironAnim.png"//si
 import ironOre from "../../public/assets/iron_ore.png"//si
 import addworker from "../../public/assets/add-workers.png"//si
-import background from "../../public/assets/backgroundMenu.jpg"//si
+import background from "../../public/assets/background.png"//si
 export const Resources = {
     background: new ImageSource(background.src),
     addworker: new ImageSource(addworker.src),
@@ -39,4 +39,4 @@ export const Resources = {
     bombaAgua: new ImageSource(bombaAgua.src)
 
 };
-export const loader = new Loader([Resources.ironOre,Resources.background,Resources.addworker,Resources.waterbomb,Resources.mapchip,Resources.iron ,Resources.ironAnim,Resources.fabric_anim, Resources.factory, Resources.bombaAgua,Resources.HeroSpriteSheetPng, Resources.coin, Resources.pasto, Resources.menuLogo]); // Agrega todos los recursos aquí
+export const loader = new Loader([Resources.ironOre,Resources.addworker,Resources.waterbomb,Resources.mapchip,Resources.iron ,Resources.ironAnim,Resources.fabric_anim, Resources.factory, Resources.bombaAgua,Resources.HeroSpriteSheetPng, Resources.coin, Resources.pasto, Resources.menuLogo]); // Agrega todos los recursos aquí
