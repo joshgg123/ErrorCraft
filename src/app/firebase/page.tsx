@@ -5,12 +5,12 @@ import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp
 import { Message } from "../componentes/types";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDnnX1T8eyfrgAwG-6OpvKklmTjrzrzL10",
-  authDomain: "errorcraft-af5c0.firebaseapp.com",
-  projectId: "errorcraft-af5c0",
-  storageBucket: "errorcraft-af5c0.appspot.com",
-  messagingSenderId: "285589731264",
-  appId: "1:285589731264:web:7d92bf63f89582b5913a25"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
