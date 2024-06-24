@@ -55,12 +55,20 @@ export default function GamePage() {
       }
     };
 
-    // Suscripción al chat solo si el usuario está guardado
-    const unsubscribeChat = (user && selectedUser) ? getMessages((newMessages: ChatMessageData[]) => {
-      setMessages(newMessages); // Casting explícito
-    }, user.id, selectedUser.id) : () => {}
+      // Suscripción al chat solo si el usuario está guardado
+      const unsubscribeChat = (user && selectedUser) ? 
+    getMessages((newMessages: ChatMessageData[]) => {
+      console.log("Nuevos mensajes recibidos en GamePage:", newMessages);
+      setMessages(newMessages);
 
-    initialize();
+      // Forzar re-renderizado de ChatWindow
+      setChatOpen(prevChatOpen => !prevChatOpen); // Cambiar el estado para forzar un re-render
+      setChatOpen(prevChatOpen => !prevChatOpen); // Volver al estado original
+
+    }, user.id, selectedUser.id) 
+    : () => {};
+
+      initialize()
 
     return () => {
       isMounted = false;
@@ -70,7 +78,7 @@ export default function GamePage() {
         setGameInstance(null);
       }
     };
-  }, [gameInstance, user, isLoaded, isSignedIn, selectedUser, userSaved, messages]); // userSaved agregado como dependencia
+  }, [gameInstance, user, isLoaded, isSignedIn, selectedUser]); 
 
   if (!clerkPublishableKey) {
     return <div>Error: Clerk publishable key is not set.</div>;

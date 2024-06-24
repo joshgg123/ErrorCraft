@@ -17,18 +17,23 @@ interface ChatAreaProps {
   
 }
 
-const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages, setMessages }) => {  
+const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages, setMessages }) => {
   const { user } = useUser();
 
   if (!selectedUser) {
     return <div className="chat-area">Selecciona un usuario para chatear</div>;
   }
 
+
+  console.log("Mensajes en chatarea:", messages);
+
   // Filtrar mensajes para el usuario seleccionado
-  const filteredMessages = messages.filter(msg =>
-    msg.participants.includes(selectedUser.id) &&
+  const filteredMessages = messages && messages.length > 0 ? messages.filter(msg => 
+    msg.participants.includes(selectedUser.id) && 
     msg.participants.includes(user?.id ?? '')
-  );
+  ) : [];
+
+  console.log("Mensajes filtrados:", filteredMessages);
   
 
   return (

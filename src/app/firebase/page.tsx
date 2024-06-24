@@ -36,7 +36,7 @@ export async function sendMessage(message: Message, selectedUserId: string): Pro
 export function getMessages(callback: (messages: ChatMessageData[]) => void, userId: string, selectedUserId: string) {
   const q = query(
     collection(db, "messages"),
-    where("participants", "array-contains-any", [userId, selectedUserId]), 
+    where("participants", "array-contains-any", [userId, selectedUserId]),
     orderBy("createdAt", "asc")
   );
 
@@ -47,7 +47,13 @@ export function getMessages(callback: (messages: ChatMessageData[]) => void, use
       const timestamp = data.createdAt instanceof Timestamp ? data.createdAt.toDate() : new Date();
       messages.push({ id: doc.id, message: data.message, user: data.user, timestamp, participants: data.participants});
     });
+
+    console.log("Mensajes actualizados en getMessages:", messages); // Agrega un log aquí para verificar los mensajes
+
     callback(messages);
+  }, (error) => {
+    console.error("Error al obtener mensajes:", error);
+    // Manejo del error, por ejemplo, mostrar un mensaje al usuario
   });
 
   return unsubscribe;

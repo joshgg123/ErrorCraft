@@ -1,6 +1,6 @@
 // src/app/componentes/ChatWindow.tsx
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import UserList from '../componentes/UserList';
 import ChatArea from '../componentes/ChatArea';
 import FunctionPanel from '../componentes/FunctionPanel';
@@ -15,7 +15,11 @@ interface ChatWindowProps {
   setMessages: React.Dispatch<React.SetStateAction<ChatMessageData[]>>; 
 }
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, messages, selectedUser, setSelectedUser, setMessages }) => { // <-- Agrega selectedUser y setSelectedUser a las props
+const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, messages, selectedUser, setSelectedUser, setMessages }) => {
+  useEffect(() => {
+    console.log("ChatWindow re-renderizado"); // Verificar si se re-renderiza
+  }, [messages, selectedUser]);
+
   const handleSelectUser = (user: User) => {
     setSelectedUser(user); // <-- Actualiza el estado en GamePage.tsx
   };

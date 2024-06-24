@@ -27,7 +27,7 @@ export const Resources = {
     HeroSpriteSheetPng: new ImageSource(heroPath.src),
     factory: new ImageSource(factory.src),
     entityClassNameFactories: {
-        player: (props: { pos: any }) => { // Replace 'any' with the appropriate type for 'pos'
+        player: (props: { pos: any }) => { 
             const player = new Player(props.pos);
             player.z = 100;
             return player;
