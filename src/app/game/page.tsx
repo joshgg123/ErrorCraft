@@ -1,19 +1,32 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
-import { Engine } from "excalibur";
 import { useUser } from "@clerk/nextjs";
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import { db } from "../firebase/page";
+import { getMessages, db } from "../firebase/page";
+import { setDoc, doc, getDoc } from "firebase/firestore";
+import { Engine } from "excalibur";
+import ChatWindow from "../componentes/ChatWindow";
+import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
 
-const GamePage: React.FC = () => {
+interface ChatMessageData {
+  id: string;
+  message: string;
+  user: string;
+  timestamp: Date;
+}
+
+const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+export default function GamePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameInstance, setGameInstance] = useState<Engine | null>(null);
-  const { user, isLoaded, isSignedIn } = useUser();
-  const [userSaved, setUserSaved] = useState(false);
+  const { isLoaded, isSignedIn, user } = useUser();
+  const [messages, setMessages] = useState<ChatMessageData[]>([]);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [userSaved, setUserSaved] = useState(false); 
 
   useEffect(() => {
     let isMounted = true;
-
+    
     const initialize = async () => {
       if (canvasRef.current && !gameInstance && user && isLoaded && isSignedIn) {
         import("./main").then(async ({ initializeGame, startGame }) => {
@@ -30,40 +43,65 @@ const GamePage: React.FC = () => {
         const userRef = doc(db, "users", userId);
         const userSnap = await getDoc(userRef);
 
-        if (userSnap.exists()) {
-          console.log("User already exists in Firebase:", { userId, userName });
-        } else {
-          console.log("User does not exist in Firebase:", { userId, userName });
+        if (!userSnap.exists()) {
           await setDoc(userRef, {
             name: userName,
             Coins: 2000,
           });
-          console.log("User saved to Firebase:", { userId, userName });
         }
-        setUserSaved(true);
+        setUserSaved(true); // Marcar que el usuario se ha guardado
       }
     };
+
+    // Suscripción al chat solo si el usuario está guardado
+    const unsubscribeChat = userSaved ? getMessages((newMessages) => {
+      setMessages(newMessages);
+    }) : () => {};
 
     initialize();
 
     return () => {
       isMounted = false;
+      unsubscribeChat();
       if (gameInstance) {
         gameInstance.stop();
         setGameInstance(null);
       }
     };
-  }, [gameInstance, user, isLoaded, isSignedIn, userSaved]);
+  }, [gameInstance, user, isLoaded, isSignedIn, userSaved]); // userSaved agregado como dependencia
+
+  if (!clerkPublishableKey) {
+    return <div>Error: Clerk publishable key is not set.</div>;
+  }
 
   return (
     <div className="fondo-about">
       <div className="flex justify-center items-center h-screen">
-        <div className="border-8 border-stone-900">
+        <div className="border-8 border-stone-900 relative">
           <canvas ref={canvasRef} className="m-auto" />
+  
+          {/* ClerkProvider para la autenticación */}
+          <ClerkProvider publishableKey={clerkPublishableKey}>
+            <SignedIn>
+              {isLoaded && isSignedIn && ( // Mostrar botón y chat solo si está autenticado
+                <div className="absolute bottom-0 left-0 p-4 w-full">
+                  <button
+                    className="open-chat-button"
+                    onClick={() => setChatOpen(!chatOpen)}
+                  >
+                    {chatOpen ? "Cerrar Chat" : "Abrir Chat"}
+                  </button>
+                  {chatOpen && <ChatWindow onClose={() => setChatOpen(false)} messages={messages} />} 
+                </div>
+              )}
+            </SignedIn>
+            <SignedOut>
+              <RedirectToSignIn />
+            </SignedOut>
+          </ClerkProvider>
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default GamePage;
