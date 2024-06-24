@@ -1,28 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useUser } from "@clerk/nextjs";
 import MessageList from '../componentes/MessageList';
 import MessageForm from '../componentes/MessageForm';
-import { ChatMessageData, SelectedUser } from '../componentes/types';
-import { useUser } from "@clerk/nextjs";
+import { ChatMessageData } from '../componentes/types'; 
+
+interface SelectedUser {
+  id: string;
+  name: string;
+}
 
 interface ChatAreaProps {
   selectedUser: SelectedUser | null;
-  messages: ChatMessageData[];
+  messages: ChatMessageData[]; 
 }
 
-export const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages }) => {
-  const { user } = useUser();
-  const [filteredMessages, setFilteredMessages] = useState<ChatMessageData[]>([]);
-
-  useEffect(() => {
-    if (selectedUser) {
-      // Filtrar mensajes para el usuario seleccionado
-      const filtered = messages.filter(msg =>
-        (msg.user === selectedUser.id && msg.receiver === user?.id) || // Mensajes enviados al usuario actual
-        (msg.user === user?.id && msg.receiver === selectedUser.id)    // Mensajes enviados por el usuario actual
-      );
-      setFilteredMessages(filtered);
-    }
-  }, [selectedUser, messages, user]);
+export const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages }) => { 
+  const { user } = useUser(); 
 
   if (!selectedUser) {
     return (
@@ -32,21 +25,28 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages }) =>
     );
   }
 
+  // Filtrar mensajes para el usuario seleccionado
+  const filteredMessages = messages.filter(msg =>
+    msg.user === selectedUser.id || 
+    (user && msg.user === (user.fullName ?? user.emailAddresses[0].emailAddress)) 
+  );
+
   return (
     <div className="chat-area">
       <h2>Chat con {selectedUser.name}</h2>
       <MessageList
         messages={filteredMessages}
-        currentUser={user?.id ?? ''}
-      />
+        currentUser={user ? (user.fullName ?? user.emailAddresses[0].emailAddress) : ''}
+      /> 
       {user && (
-        <MessageForm
-          user={user?.id ?? ''}
-          receiver={selectedUser.id} // Asegúrate de pasar 'receiver' aquí
-        />
+        <MessageForm user={user.fullName ?? user.emailAddresses[0].emailAddress} />
       )}
     </div>
   );
 };
 
 export default ChatArea;
+
+
+
+

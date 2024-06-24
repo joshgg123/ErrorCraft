@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
 import { sendMessage } from '../firebase/page';
-import { ChatMessageData } from '../componentes/types';
-import { text } from 'stream/consumers';
+import { Message } from '../componentes/types';
 
 interface MessageFormProps {
   user: string;
-  receiver: string; // Asegúrate de que 'receiver' esté declarado como prop
 }
 
-const MessageForm: React.FC<MessageFormProps> = ({ user, receiver }) => {
+const MessageForm: React.FC<MessageFormProps> = ({ user }) => {
   const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (message.trim()) {
-      const newMessage: ChatMessageData = {
+      const newMessage: Message = {
         id: '', // Firestore generará automáticamente el ID
-        texto: message,
-        user: user,
-        receiver: receiver,
+        text: message,
+        user,
         timestamp: new Date(),
       };
       try {

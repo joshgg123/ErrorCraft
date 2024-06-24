@@ -21,7 +21,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, currentUser }) => {
             <span className="message-sender">{msg.user}</span>
             <span className="message-time">{formatTimestamp(msg.timestamp)}</span>
           </div>
-          <p className="message-text">{msg.texto}</p>
+          <p className="message-text">{msg.message}</p>
         </div>
       ))}
     </div>
@@ -29,3 +29,4 @@ const MessageList: React.FC<MessageListProps> = ({ messages, currentUser }) => {
 };
 
 export default MessageList;
+
