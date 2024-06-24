@@ -35,4 +35,4 @@ export const Resources = {
     bombaAgua: new ImageSource(bombaAgua.src)
 
 };
-export const loader = new Loader([Resources.ironOre,Resources.waterbomb,Resources.mapchip,Resources.iron ,Resources.ironAnim,Resources.fabric_anim, Resources.factory, Resources.bombaAgua,Resources.HeroSpriteSheetPng, Resources.coin, Resources.pasto]); // Agrega todos los recursos aquí
+export const loader = new Loader([Resources.ironOre,Resources.waterbomb,Resources.mapchip,Resources.iron ,Resources.ironAnim,Resources.fabric_anim, Resources.factory, Resources.bombaAgua,Resources.HeroSpriteSheetPng, Resources.coin, Resources.pasto, Resources.menuLogo]); // Agrega todos los recursos aquí
