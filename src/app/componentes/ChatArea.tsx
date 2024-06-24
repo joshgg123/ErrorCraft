@@ -1,6 +1,9 @@
 import React from 'react';
 import MessageList from '../componentes/MessageList';
 import MessageForm from '../componentes/MessageForm';
+import { useUser } from "@clerk/nextjs";
+import { ChatMessageData } from '../componentes/types'; 
+
 
 interface SelectedUser {
   id: string;
@@ -8,22 +11,37 @@ interface SelectedUser {
 }
 
 interface ChatAreaProps {
-  selectedUser: SelectedUser | null; 
-  user: string;
+  selectedUser: SelectedUser | null;
+  messages: ChatMessageData[];  
 }
 
-const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, user }) => {
+const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages }) => {  
+  const { user } = useUser();
+
   if (!selectedUser) {
     return <div className="chat-area">Selecciona un usuario para chatear</div>;
   }
 
+  // Filtrar mensajes para el usuario seleccionado
+  const filteredMessages = messages.filter(msg => 
+    msg.user === selectedUser.id || 
+    (user && msg.user === (user.fullName ?? user.emailAddresses[0].emailAddress)) 
+  );
+
   return (
     <div className="chat-area">
       <h2>Chat con {selectedUser.name}</h2>
-      <MessageList userId={selectedUser.id} />
-      <MessageForm user={user} /> 
+      <MessageList
+        messages={filteredMessages}
+        currentUser={user ? (user.fullName ?? user.emailAddresses[0].emailAddress) : ''}
+      /> 
+      {/*                                                                                ^-- Pasamos currentUser acá */}
+      {user && (
+        <MessageForm user={user.fullName ?? user.emailAddresses[0].emailAddress} />
+      )}
     </div>
   );
 };
 
 export default ChatArea;
+

@@ -13,7 +13,7 @@ const MessageForm: React.FC<MessageFormProps> = ({ user }) => {
     e.preventDefault();
     if (message.trim()) {
       const newMessage: Message = {
-        id: '', // Firestore generará automáticamente el ID
+        id: '', 
         text: message,
         user,
         timestamp: new Date(),

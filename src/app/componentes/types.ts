@@ -24,4 +24,31 @@ export interface Message {
     user: string;
     timestamp: Date;
   }
+
+  export interface MessageListProps {	
+    userId: string;	
+    messages: ChatMessageData[];
+  }
+
+  export interface ChatAreaProps {
+    selectedUser: SelectedUser | null;
+    messages: ChatMessageData[];
+  }
+
+  export interface MessageFormProps {
+    user: string;
+  }
+
+  export interface ChatAreaProps {
+    selectedUser: SelectedUser | null;
+    messages: ChatMessageData[];
+  }
+
+  export interface MessageListProps {
+    userId: string;
+    messages: ChatMessageData[];
+  }
+
+
+
   
