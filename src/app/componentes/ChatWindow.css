@@ -61,6 +61,22 @@
   .functions-panel {
     @apply w-1/4 p-4; /* Ocupa 1/4 del ancho y tiene relleno */
   }
+
+  .message-header {
+    @apply flex justify-between items-center mb-1; /* Alinea los elementos horizontalmente */
+  }
+  
+  .message-sender {
+    @apply font-semibold; /* Nombre de usuario en negrita */
+  }
+  
+  .message-time {
+    @apply text-xs text-gray-500; /* Hora en tamaño pequeño y color gris claro */
+  }
+  
+  .message-text {
+    @apply whitespace-pre-wrap; /* Permite saltos de línea en el texto */
+  }
   
   
   
