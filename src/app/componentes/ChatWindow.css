@@ -50,6 +50,7 @@
   }
   
   .message-form input {
+    color: black;
     @apply flex-grow p-2 rounded-l-md border border-gray-600; /* Input que ocupa el espacio disponible */
   }
   
