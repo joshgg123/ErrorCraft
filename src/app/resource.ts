@@ -14,7 +14,7 @@ import iron from "../../public/assets/iron.png"//si
 import ironAnim from "../../public/assets/ironAnim.png"//si
 import ironOre from "../../public/assets/iron_ore.png"//si
 import addworker from "../../public/assets/add-workers.png"//si
-import background from "../../public/assets/background.png"//si
+import background from "../../public/assets/backgroundMenu.jpg"//si
 export const Resources = {
     background: new ImageSource(background.src),
     addworker: new ImageSource(addworker.src),
