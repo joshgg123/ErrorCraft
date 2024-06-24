@@ -6,13 +6,7 @@ import { setDoc, doc, getDoc, collection, onSnapshot } from "firebase/firestore"
 import { Engine } from "excalibur";
 import ChatWindow from "../componentes/ChatWindow";
 import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
-
-interface ChatMessageData {
-  id: string;
-  message: string;
-  user: string;
-  timestamp: Date;
-}
+import { ChatMessageData } from "../componentes/types";
 
 const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
@@ -22,11 +16,11 @@ export default function GamePage() {
   const { isLoaded, isSignedIn, user } = useUser();
   const [messages, setMessages] = useState<ChatMessageData[]>([]);
   const [chatOpen, setChatOpen] = useState(false);
-  const [userSaved, setUserSaved] = useState(false); 
+  const [userSaved, setUserSaved] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
-    
+
     const initialize = async () => {
       if (canvasRef.current && !gameInstance && user && isLoaded && isSignedIn) {
         import("./main").then(async ({ initializeGame, startGame }) => {
@@ -59,9 +53,7 @@ export default function GamePage() {
         newMessages.push({ id: doc.id, ...doc.data() } as ChatMessageData);
       });
       setMessages(newMessages);
-    }
-    );
-
+    });
 
     // Suscripción al chat solo si el usuario está guardado
     const unsubscribeChat = userSaved ? getMessages((newMessages) => {
@@ -79,7 +71,7 @@ export default function GamePage() {
         setGameInstance(null);
       }
     };
-  }, [gameInstance, user, isLoaded, isSignedIn, userSaved]); // userSaved agregado como dependencia
+  }, [gameInstance, user, isLoaded, isSignedIn, userSaved]);
 
   if (!clerkPublishableKey) {
     return <div>Error: Clerk publishable key is not set.</div>;
@@ -102,7 +94,7 @@ export default function GamePage() {
                   >
                     {chatOpen ? "Cerrar Chat" : "Abrir Chat"}
                   </button>
-                  {chatOpen && <ChatWindow onClose={() => setChatOpen(false)} messages={messages} />} 
+                  {chatOpen && <ChatWindow onClose={() => setChatOpen(false)} messages={messages} />}
                 </div>
               )}
             </SignedIn>
@@ -115,4 +107,3 @@ export default function GamePage() {
     </div>
   );
 }
-

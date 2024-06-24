@@ -22,6 +22,7 @@ export async function sendMessage(message: Message): Promise<void> {
     const newMessageRef = await addDoc(collection(db, 'messages'), {
       message: message.texto,
       user: message.user,
+      receiver: message.receiver,
       timestamp: message.timestamp,
     });
     console.log("Mensaje guardado con ID:", newMessageRef.id); // Mensaje de confirmación
@@ -46,7 +47,7 @@ export function getMessages(callback: (messages: ChatMessageData[]) => void) {
       ) {
         // Convertir Timestamp a Date
         const timestamp = data.timestamp.toDate();
-        messages.push({ id: doc.id, texto: data.message, user: data.user, timestamp });
+        messages.push({ id: doc.id, texto: data.message,receiver:data.receiver , user: data.user, timestamp });
       } else {
         console.error("Mensaje con formato incorrecto:", doc.data());
       }
@@ -61,6 +62,7 @@ export interface ChatMessageData {
   id: string;
   texto: string;
   user: string;
+  receiver: string;
   timestamp: Date;
 }
 

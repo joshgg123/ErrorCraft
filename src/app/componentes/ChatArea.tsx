@@ -12,7 +12,8 @@ interface ChatAreaProps {
 export const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages }) => {
   const { user } = useUser();
   const [filteredMessages, setFilteredMessages] = useState<ChatMessageData[]>([]);
-
+ console.log("ChatAreaProps",selectedUser,messages)
+ console.log(messages)
   useEffect(() => {
     if (selectedUser) {
       // Filtrar mensajes para el usuario seleccionado
