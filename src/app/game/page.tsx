@@ -6,12 +6,13 @@ import { setDoc, doc, getDoc } from "firebase/firestore";
 import { Engine } from "excalibur";
 import ChatWindow from "../componentes/ChatWindow";
 import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
-
+import { User } from "../componentes/types";
 interface ChatMessageData {
   id: string;
   message: string;
   user: string;
   timestamp: Date;
+  participants: string[];
 }
 
 const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
@@ -23,6 +24,7 @@ export default function GamePage() {
   const [messages, setMessages] = useState<ChatMessageData[]>([]);
   const [chatOpen, setChatOpen] = useState(false);
   const [userSaved, setUserSaved] = useState(false); 
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -54,9 +56,9 @@ export default function GamePage() {
     };
 
     // Suscripción al chat solo si el usuario está guardado
-    const unsubscribeChat = userSaved ? getMessages((newMessages) => {
-      setMessages(newMessages);
-    }) : () => {};
+    const unsubscribeChat = (user && selectedUser) ? getMessages((newMessages: ChatMessageData[]) => {
+      setMessages(newMessages); // Casting explícito
+    }, user.id, selectedUser.id) : () => {}
 
     initialize();
 
@@ -68,7 +70,7 @@ export default function GamePage() {
         setGameInstance(null);
       }
     };
-  }, [gameInstance, user, isLoaded, isSignedIn, userSaved]); // userSaved agregado como dependencia
+  }, [gameInstance, user, isLoaded, isSignedIn, selectedUser, userSaved, messages]); // userSaved agregado como dependencia
 
   if (!clerkPublishableKey) {
     return <div>Error: Clerk publishable key is not set.</div>;
@@ -89,7 +91,7 @@ export default function GamePage() {
                   >
                     {chatOpen ? "Cerrar Chat" : "Abrir Chat"}
                   </button>
-                  {chatOpen && <ChatWindow onClose={() => setChatOpen(false)} messages={messages} />} 
+                  {chatOpen && <ChatWindow onClose={() => setChatOpen(false)} messages={messages} selectedUser = {selectedUser} setSelectedUser = {setSelectedUser} setMessages = {setMessages} />} 
                 </div>
               )}
             </SignedIn>

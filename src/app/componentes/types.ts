@@ -23,6 +23,7 @@ export interface Message {
     message: string;
     user: string;
     timestamp: Date;
+    participants: string[];
   }
 
   export interface MessageListProps {	
@@ -36,7 +37,8 @@ export interface Message {
   }
 
   export interface MessageFormProps {
-    user: string;
+    user: User | null;
+    selectedUser: string
   }
 
   export interface ChatAreaProps {

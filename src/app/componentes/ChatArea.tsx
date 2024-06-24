@@ -2,7 +2,7 @@ import React from 'react';
 import MessageList from '../componentes/MessageList';
 import MessageForm from '../componentes/MessageForm';
 import { useUser } from "@clerk/nextjs";
-import { ChatMessageData } from '../componentes/types'; 
+import { ChatMessageData } from '../componentes/types';
 
 
 interface SelectedUser {
@@ -12,10 +12,12 @@ interface SelectedUser {
 
 interface ChatAreaProps {
   selectedUser: SelectedUser | null;
-  messages: ChatMessageData[];  
+  messages: ChatMessageData[];
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessageData[]>>; // <-- Agregar setMessages
+  
 }
 
-const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages }) => {  
+const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages, setMessages }) => {  
   const { user } = useUser();
 
   if (!selectedUser) {
@@ -23,10 +25,11 @@ const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages }) => {
   }
 
   // Filtrar mensajes para el usuario seleccionado
-  const filteredMessages = messages.filter(msg => 
-    msg.user === selectedUser.id || 
-    (user && msg.user === (user.fullName ?? user.emailAddresses[0].emailAddress)) 
+  const filteredMessages = messages.filter(msg =>
+    msg.participants.includes(selectedUser.id) &&
+    msg.participants.includes(user?.id ?? '')
   );
+  
 
   return (
     <div className="chat-area">
@@ -37,8 +40,12 @@ const ChatArea: React.FC<ChatAreaProps> = ({ selectedUser, messages }) => {
       /> 
       {/*                                                                                ^-- Pasamos currentUser acá */}
       {user && (
-        <MessageForm user={user.fullName ?? user.emailAddresses[0].emailAddress} />
-      )}
+    <MessageForm 
+      user={user.fullName ?? user.emailAddresses[0].emailAddress} // Extraer el nombre o email del usuario
+      selectedUser={selectedUser?.id ?? ""}  
+      setMessages={setMessages} 
+    />
+  )}
     </div>
   );
 };

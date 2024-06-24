@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
 import { sendMessage } from '../firebase/page';
-import { Message } from '../componentes/types';
+import { Message, User } from '../componentes/types';
+import {useUser} from "@clerk/nextjs";
 
 interface MessageFormProps {
-  user: string;
+  user: User;
+  selectedUser: string;
 }
 
-const MessageForm: React.FC<MessageFormProps> = ({ user }) => {
+const MessageForm: React.FC<MessageFormProps> = ({ selectedUser }) => {
   const [message, setMessage] = useState('');
+  const { user } = useUser(); 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (message.trim()) {
+    if (message.trim() && user) { 
       const newMessage: Message = {
         id: '', 
         text: message,
-        user,
+        user: user.fullName ?? user.emailAddresses[0].emailAddress, 
         timestamp: new Date(),
       };
       try {
-        await sendMessage(newMessage);
+        await sendMessage(newMessage, selectedUser); 
         setMessage('');
       } catch (error) {
         console.error('Error al enviar el mensaje:', error);

@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+// src/app/componentes/ChatWindow.tsx
+
+import React from 'react';
 import UserList from '../componentes/UserList';
 import ChatArea from '../componentes/ChatArea';
 import FunctionPanel from '../componentes/FunctionPanel';
@@ -7,14 +9,15 @@ import { User, ChatMessageData } from '../componentes/types';
 
 interface ChatWindowProps {
   onClose: () => void;
-  messages: ChatMessageData[]; 
+  messages: ChatMessageData[];
+  selectedUser: User | null; 
+  setSelectedUser: (user: User | null) => void; 
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessageData[]>>; 
 }
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, messages }) => { // <-- Agrega messages a las props
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
+const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, messages, selectedUser, setSelectedUser, setMessages }) => { // <-- Agrega selectedUser y setSelectedUser a las props
   const handleSelectUser = (user: User) => {
-    setSelectedUser(user);
+    setSelectedUser(user); // <-- Actualiza el estado en GamePage.tsx
   };
 
   return (
@@ -22,8 +25,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, messages }) => { // <-
       <button onClick={onClose}>Cerrar</button>
       <div className="chat-container">
         <UserList onSelectUser={handleSelectUser} />
-        {/* Pasamos los mensajes a ChatArea */}
-        <ChatArea selectedUser={selectedUser} messages={messages} />  
+        <ChatArea selectedUser={selectedUser} messages={messages} setMessages={setMessages} />
         <FunctionPanel />
       </div>
     </div>

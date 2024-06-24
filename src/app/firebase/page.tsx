@@ -1,7 +1,7 @@
 "use client";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
+import { serverTimestamp, getFirestore, collection, where,  addDoc, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
 import { Message } from "../componentes/types";
 
 const firebaseConfig = {
@@ -18,39 +18,34 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app); 
 export const auth = getAuth(app);
 
-export async function sendMessage(message: Message): Promise<void> {
+export async function sendMessage(message: Message, selectedUserId: string): Promise<void> {
   try {
-    const newMessageRef = await addDoc(collection(db, 'messages'), {
-      message: message.text,
-      user: message.user,
-      timestamp: message.timestamp,
+    await addDoc(collection(db, 'messages'), {
+      ...message,
+      createdAt: serverTimestamp(),
+      participants: [message.user, selectedUserId], 
     });
-    console.log("Mensaje guardado con ID:", newMessageRef.id); // Mensaje de confirmación
+    console.log("Mensaje guardado con ID:"); 
   } catch (error) {
-    console.error("Error al guardar mensaje:", error); // Manejo de errores
+    console.error("Error al guardar mensaje:", error);
     throw error;
   }
 }
 
 
-export function getMessages(callback: (messages: ChatMessageData[]) => void) {
-  const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
+export function getMessages(callback: (messages: ChatMessageData[]) => void, userId: string, selectedUserId: string) {
+  const q = query(
+    collection(db, "messages"),
+    where("participants", "array-contains-any", [userId, selectedUserId]), 
+    orderBy("createdAt", "asc")
+  );
 
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     const messages: ChatMessageData[] = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      if (
-        typeof data.message === "string" &&
-        typeof data.user === "string" &&
-        data.timestamp instanceof Timestamp // Comprobar si es Timestamp de Firestore
-      ) {
-        // Convertir Timestamp a Date
-        const timestamp = data.timestamp.toDate();
-        messages.push({ id: doc.id, message: data.message, user: data.user, timestamp });
-      } else {
-        console.error("Mensaje con formato incorrecto:", doc.data());
-      }
+      const timestamp = data.createdAt instanceof Timestamp ? data.createdAt.toDate() : new Date();
+      messages.push({ id: doc.id, message: data.message, user: data.user, timestamp, participants: data.participants});
     });
     callback(messages);
   });
@@ -63,7 +58,9 @@ export interface ChatMessageData {
   message: string;
   user: string;
   timestamp: Date;
+  participants: string[];
 }
+
 
 
 
