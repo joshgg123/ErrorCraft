@@ -5,13 +5,12 @@ import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp
 import { Message } from "../componentes/types";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDjPoIyEJ0xjH98l7c6WP2xxPFD9lsGjLM",
-  authDomain: "errorcraft-1296d.firebaseapp.com",
-  projectId: "errorcraft-1296d",
-  storageBucket: "errorcraft-1296d.appspot.com",
-  messagingSenderId: "815598507118",
-  appId: "1:815598507118:web:1a803df62c94c26665c27f",
-  measurementId: "G-J9B0FJKBB9"
+  apiKey: "AIzaSyDnnX1T8eyfrgAwG-6OpvKklmTjrzrzL10",
+  authDomain: "errorcraft-af5c0.firebaseapp.com",
+  projectId: "errorcraft-af5c0",
+  storageBucket: "errorcraft-af5c0.appspot.com",
+  messagingSenderId: "285589731264",
+  appId: "1:285589731264:web:7d92bf63f89582b5913a25"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -21,7 +20,7 @@ export const auth = getAuth(app);
 export async function sendMessage(message: Message): Promise<void> {
   try {
     const newMessageRef = await addDoc(collection(db, 'messages'), {
-      message: message.text,
+      message: message.texto,
       user: message.user,
       timestamp: message.timestamp,
     });
@@ -47,7 +46,7 @@ export function getMessages(callback: (messages: ChatMessageData[]) => void) {
       ) {
         // Convertir Timestamp a Date
         const timestamp = data.timestamp.toDate();
-        messages.push({ id: doc.id, message: data.message, user: data.user, timestamp });
+        messages.push({ id: doc.id, texto: data.message, user: data.user, timestamp });
       } else {
         console.error("Mensaje con formato incorrecto:", doc.data());
       }
@@ -60,7 +59,7 @@ export function getMessages(callback: (messages: ChatMessageData[]) => void) {
 
 export interface ChatMessageData {
   id: string;
-  message: string;
+  texto: string;
   user: string;
   timestamp: Date;
 }

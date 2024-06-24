@@ -1,7 +1,8 @@
 export interface Message {
     id: string; 
-    text: string; 
+    texto: string; 
     user: string; 
+    receiver: string;
     timestamp: Date; 
 }
 
@@ -20,13 +21,15 @@ export interface SelectedUser {
 
 export interface ChatMessageData {
     id: string;
-    message: string;
+    texto: string; // Renombramos 'message' a 'text' para que coincida con el tipo 'Message'
     user: string;
+    receiver: string; // Agregamos 'receiver' como prop
     timestamp: Date;
   }
 
   export interface MessageListProps {
     userId: string;
+    receiverId: string;
     messages: ChatMessageData[];
   }
 
