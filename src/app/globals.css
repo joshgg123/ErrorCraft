@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+.Menu {
+  background-image: url('../../public/assets/backgroundMenu.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh; /* Esto asegura que el fondo cubra toda la ventana */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.header {
+  position: fixed;
+  top: 20px;
+  left: 20px; /* Mover la sección de los botones al lado izquierdo */
+  z-index: 1000; /* Asegura que los botones estén por encima del contenido */
+}
+
+.signin-button {
+  background-color: white; /* Agrega un fondo blanco al botón de inicio de sesión */
+  padding: 10px 20px; /* Ajusta el relleno según sea necesario */
+  border-radius: 4px; /* Redondea las esquinas del botón */
+  margin-bottom: 10px; /* Espacio entre los botones */
+}
+.Titulo {
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  font-size: 2.25rem;
+  margin-bottom: 0,5rem;
+  color: #000;
+}
+
 
 
 
