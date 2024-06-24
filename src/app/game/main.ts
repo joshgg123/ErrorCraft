@@ -4,7 +4,7 @@ import { Player } from '../objects/player';
 import { loader } from '../resource';
 import { config } from '../config';
 import { Coin } from '../componentes/coins';
-import { db } from '../firebase/page';
+import { db } from '../firebase/firebaseConfig';
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import { Iron } from '../componentes/iron';
 

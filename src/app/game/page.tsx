@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { getMessages } from "../firebase/getMessages";
-import { db } from "../firebase/page";
+import { db } from "../firebase/firebaseConfig";
 import { setDoc, doc, getDoc, collection, onSnapshot } from "firebase/firestore";
 import { Engine } from "excalibur";
 import ChatWindow from "../componentes/ChatWindow";

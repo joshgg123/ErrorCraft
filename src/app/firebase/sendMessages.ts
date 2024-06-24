@@ -1,4 +1,4 @@
-import { db } from '../firebase/page';
+import { db } from './firebaseConfig';
 import { addDoc, collection } from 'firebase/firestore';
 import { Message } from '../componentes/types';
 

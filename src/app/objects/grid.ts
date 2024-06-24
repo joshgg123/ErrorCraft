@@ -3,7 +3,7 @@ import { config } from "../config";
 import { Resources } from "../resource";
 import { Building } from "./building";
 import { doc, setDoc, collection, getDocs, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
-import { db } from "../firebase/page"; // Ajusta la ruta según sea necesario
+import { db } from "../firebase/firebaseConfig"; // Ajusta la ruta según sea necesario
 
 export class Grid {
   public backgroundMap!: TileMap;

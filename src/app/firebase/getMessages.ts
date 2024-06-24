@@ -1,5 +1,5 @@
 import { collection, query, orderBy, onSnapshot, Timestamp } from "firebase/firestore";
-import { db } from "../firebase/page";
+import { db } from "./firebaseConfig";
 import { ChatMessageData } from "../componentes/types";
 
 export function getMessages(callback: (messages: ChatMessageData[]) => void) {

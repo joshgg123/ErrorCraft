@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase/page';
+import { db } from '../firebase/firebaseConfig';
 import { User } from '../componentes/types';
 import { useUser } from "@clerk/nextjs"; // Asegúrate de importar useUser
 
